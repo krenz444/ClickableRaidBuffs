@@ -1,0 +1,173 @@
+
+                                                Clickable Raid Buffs
+                                                      by Furphy
+                                            (Originally created by Funki)
+
+
+=======================================================================================================================
+                                                 CURRENT PATCH NOTES
+=======================================================================================================================
+
+**v7.0.0**
+
+- **Addon Restrictions Compliance**
+  - Updated the addon to comply with new Blizzard addon restrictions regarding combat log access and protected functions.
+  - Removed all functionality that relied on `COMBAT_LOG_EVENT_UNFILTERED` to prevent `ADDON_ACTION_FORBIDDEN` errors.
+  - Added combat checks to various modules to prevent restricted API calls during combat.
+  - Ensured secure frames are handled correctly to avoid taint issues.
+
+
+=======================================================================================================================
+                                                HISTORICAL PATCH NOTES
+=======================================================================================================================
+
+**v6.2.5**  
+
+- Fixed spells incorrectly being registered as cast by the player  
+- Fixed bladed vs. blunt category distinction for Fist Weapon enchants  
+- Reworked the Weapon Enchant module for a more modular design  
+- Added "Hide All" and "Show All" buttons to each header in the Ignore List to toggle checkboxes in bulk  
+- Inky Black Potion and Stinky Bright Potion now detect when you are in Hallowfall and do not appear  
+- Raid Buff X / Y overlay now caps the Y value at the maximum number of players in the instance  
+
+
+**v6.2.4**  
+
+- Fixed unintended Raid Bot Alert spam  
+- Fixed Range gate not functioning for many applicable spells  
+
+
+**v6.2.3**  
+
+- Fixed timers and bottom labels being slightly misaligned  
+- Fixed the Alliance version of the Traveler's Tundra Mammoth not summoning from the Durability icon  
+- Fixed Reaves Engineering repair mode not triggering the Repair Bot alert  
+- Fixed successive Alerts overlapping instead of stacking correctly  
+- Fixed occasional duplication of Alerts  
+- Added a sub-tab to the Customize menu for selecting a preferred repair mount  
+- Added Grizzly Hills Packmaster as a summonable repair mount for the Durability icon  
+- Added Stinky Bright Potion to the Cosmetics category  
+- Added new Alert tab options for duration, animation height, and animation speed  
+
+
+**v6.2.2**  
+
+- Fixed Hunter pets not respecting the Ignore option  
+- Fixed Revive Pet not respecting the Ignore option  
+- Fixed Hunter pets incorrectly displaying as Marksmanship without Unbreakable Bond talented  
+- Fixed Grimoire of Sacrifice not displaying at all appropriate times  
+
+
+**v6.2.1**  
+
+- Fixed an issue that suppressed all Raid Buffs
+  
+  
+**v6.2.0**  
+
+**NOTE**:  Because of some significant under-the-hood changes, all options **must** be reset when installing this version.
+           You will be prompted to do so when you first log in.  Click Yes, and then you can re-configure things.
+
+- **Performance & Efficiency**  
+  - Added throttling for high-frequency events to reduce CPU load  
+  - Centralized event handling into a single system for efficiency  
+  - Reworked Alerts module to significantly reduce overhead, especially in combat  
+  - Fixed unintended resource usage while in combat, dead, or a ghost  
+  - General code formatting and cleanup  
+
+- **New Features**  
+  - Added all Mage portals to the Alerts module (localized spell names supported)  
+  - Added missing food items: Authentic Undermine Clam Chowder, Hearty Authentic Undermine Clam Chowder  
+  - Added Algari Repair Bot 11O to the repair bot Alert  
+  - Added a slash command to fully reset settings and SavedVariables: /crb reset, /buff reset, /funki reset  
+  - Added in-group requirement for single-target raid buffs (e.g., Source of Magic, Symbiotic Relationship)  
+  - Added range checks for group-wide raid buffs, hiding the icon if no eligible targets are in range  
+  - Added Recuperate, which displays out of combat if below 100% health and not in a rested area  
+
+- **Options Menu Improvements**  
+  - Introduced a new Customization tab for various addon options  
+  - Renamed the Raid Announcer module and tab to “Alerts”  
+  - Added an option to disable the Alerts module while in combat  
+  - Moved Mythic+ options into a dedicated sub-tab under Customization  
+  - Added an option to reverse the display order of Hunter pets  
+  - Added an option to disable the Hunter pet specialization icon  
+  - Added an option to swap the Hunter pet’s icon with its special ability icon  
+  - Added an option to show the Hunter pet’s special ability icon, instead of the pet's icon, on mouseover 
+  - Added an option to disable tooltips on icons  
+
+- **System Updates**  
+  - Restructured glow color handling for consistency and easier expansion  
+  - Runeforge Reminder (Death Gate) now uses the Special glow color  
+  - Reworked gating logic for a more modular and flexible design  
+  - Renamed some tabs in the Options menu
+  - Rebuilt the Trinkets module for improved reliability;  
+
+- **Bug Fixes**  
+  - Cosmetic items are now properly ignored by default on new installs  
+  - Hearty Feast of the Midnight Masquerade now correctly triggers feast announcements  
+  - Eating icon now properly detects all localized buff names and hides food icons while eating
+  - Eating icon now clears when Well Fed or Hearty Well Fed is gained
+  - Fixed Blessing of the Bronze not detecting all raid copies of the spell  
+  - Fixed Shaman Shields entries on the Ignore List not functioning  
+  - Fixed timers hanging at 0:01 instead of clearing at 0:00  
+  - Fixed icons not refreshing properly when reaching the configured threshold  
+  - Fixed weapon oils not showing with bows, guns, or wands equipped  
+  - Fixed castable weapon enchants (e.g., Flametongue Weapon) not displaying properly
+  - Fixed cosmetic items not being ignored on fresh installs  
+  - Fixed Enable Glow checkbox desync on reload (appeared checked but inactive until re-toggled)  
+  - Fixed an issue that caused So’Leah’s Secret Technique to not display reliably
+    - This item does not yet create a macro to re-cast on the previous target (planned for a future update)
+  - Fixed an issue that could cause an error if reloading the UI while in combat
+  - Fixed an issue that could cause the buttons on the Mover frame to load improperly
+
+- **UI & Quality of Life**  
+  - Class Abilities on the Ignore tab now prioritize the player’s class first  
+  - Added addon version number to the Info tab of the Options menu  
+
+**v6.1.0**
+- Fixed an issue where some settings could reset to default unintentionally
+- Fixed Warrior Stances not displaying as expected
+- Fixed certain spells being incorrectly linked together on the Ignore List
+- Fixed duplicate entries appearing for some spells on the Ignore List
+- Fixed weapon enchants displaying when they shouldn’t
+- Fixed some checks continuing while in combat
+- Fixed performance slowdowns during high event activity
+- Reorganized addon files for clarity
+- Removed the charge count text from the Healthstone delete icon when swapping Warlock Healthstone talents
+- Pet-related icons no longer display while mounted
+- Added a separate time threshold for Soulstone
+- Added a new Mythic+ tab with Keystone-specific settings:
+  - Added a separate threshold for current-season Mythic dungeons (before the timer starts)
+  - Added an option to hide consumables during active Mythic Keystone runs (after the timer starts)
+- Added tooltips to reset buttons on number selectors, consistent with other elements
+- General performance improvements
+
+**v6.0.5**
+- Fixed an issue that caused Arcane Familiar and Paladin Auras to behave incorrectly
+
+**v6.0.4**
+- Added patch notes to the README file
+- Renamed the “Exclusions” tab to “Ignore List” for clarity
+- Improved wording of the Info tab note about cities, rested areas, and instances
+- Fixed Arcane Intellect showing the wrong icon
+- Fixed Arcane Familiar appearing without the talent learned
+- Fixed Thunderstrike Ward incorrectly suppressing weapon enchant items
+- Fixed categorization logic for weapon enchant items
+
+**v6.0.3**  
+- Excluded the Well Fed buff from campfires in Delves  
+- Prioritized *Devotion Aura* in instanced content (shows even if another aura is active)  
+
+**v6.0.2**  
+- Fixed right-click sometimes triggering buffs instead of left-click  
+- Fixed certain spells not auto-casting on the player  
+- Fixed *Hearty Well Fed* being ignored by item time thresholds  
+
+**v6.0.1**  
+- Fixed flasks ignoring item time thresholds  
+- Fixed food not reappearing after Well Fed dropped below threshold  
+- Disabled Pets module for Marksmanship Hunters without *Unbreakable Bond* talent  
+
+**v6.0.0**  
+- Complete rewrite from WeakAura pack to standalone addon  
+- Vastly improved performance and efficiency  

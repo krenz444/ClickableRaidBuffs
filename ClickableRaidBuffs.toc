@@ -1,0 +1,121 @@
+## Interface: 110200 110205 120000 120001
+## Title: |cff00ccffClickable Raid Buffs|r
+## Notes: Displays missing raid buffs and temporary enchants, and allows you to click them to cast the buff or use the item.
+## Author: Furphy
+## Version: 7.0.0
+## IconTexture: Interface\AddOns\ClickableRaidBuffs\Media\furphyMinimapIcon
+## SavedVariables: ClickableRaidBuffsDB ClickableRaidBuffsMinimapDB
+## OptionalDeps: LibStub CallbackHandler-1.0 LibSharedMedia-3.0 LibCustomGlow-1.0 AceConsole-3.0 LibDataBroker-1.1 LibDBIcon-1.0
+
+
+# --- Embedded libraries ---
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
+Libs\Ace3\AceAddon-3.0\AceAddon-3.0.lua
+Libs\Ace3\AceDB-3.0\AceDB-3.0.lua
+Libs\AceConsole-3.0\AceConsole-3.0.lua
+Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
+Libs\LibCustomGlow-master\LibCustomGlow-1.0.lua
+Libs\LibDBIcon-1.0\LibDataBroker-1.1\LibDataBroker-1.1.lua
+Libs\LibDBIcon-1.0\LibDBIcon-1.0\LibDBIcon-1.0.lua
+
+# --- Media ---
+Media\FontRegistration.lua
+Media\SoundRegistration.lua
+
+# --- Core ---
+Core\Base.lua
+Core\PlayerInfo.lua
+Core\Buffs.lua
+Core\RaidBuffsScan.lua
+Core\BagScan.lua
+Core\Ticker.lua
+Core\UpdateBus.lua
+Core\Events.lua
+Core\Order.lua
+Core\RosterWatch.lua
+Core\MinimapButton.lua
+Core\Mover.lua
+Core\Exclusions.lua
+Core\Click.lua
+Core\GateCheck.lua
+Core\EncourageReset.lua
+
+# --- Gates ---
+Gates\Instance_Gate.lua
+Gates\Level_Gate.lua
+Gates\Rested_Gate.lua
+Gates\Group_Gate.lua
+Gates\Death_Gate.lua
+Gates\NoPet_Gate.lua
+Gates\Mounted_Gate.lua
+Gates\WarlockSacrifice_Gate.lua
+Gates\Range_Gate.lua
+Gates\MineOnly_Gate.lua
+Gates\Map_Gate.lua
+
+# --- Data ---
+Data\Food_Table.lua
+Data\Flask_Table.lua
+Data\MainHand_Table.lua
+Data\OffHand_Table.lua
+Data\RaidBuffs_Table.lua
+Data\AugmentRune_Table.lua
+Data\Pets_Table.lua
+Data\ShamanShields_Table.lua
+Data\CastableWeaponEnchants_Table.lua
+Data\RoguePoisons_Table.lua
+Data\CosmeticItems_Table.lua
+Data\Alerts_Table.lua
+Data\Trinkets_Table.lua
+
+# --- Modules ---
+Modules\FoodStatus.lua
+Modules\AugmentRune.lua
+Modules\RaidBuffTargeting.lua
+Modules\FixedTarget.lua
+Modules\Pets.lua
+Modules\ShamanShields.lua
+Modules\Durability.lua
+Modules\CastableWeaponEnchants.lua
+Modules\DKWeaponEnchantCheck.lua
+Modules\RoguePoisons.lua
+Modules\Healthstone.lua
+Modules\Exclusions.lua
+Modules\Cosmetics.lua
+Modules\Alerts.lua
+Modules\WeaponEnchants.lua
+Modules\Flask.lua
+Modules\MythicPlus.lua
+Modules\Trinkets.lua
+Modules\Delves.lua
+Modules\Recuperate.lua
+
+# --- UI ---
+UI\Anchor.lua
+UI\Util.lua
+UI\Fonts.lua
+UI\Glow.lua
+UI\Cooldown.lua
+UI\VisualCore.lua
+UI\Render.lua
+UI\Timer.lua
+UI\TextStyles.lua
+
+# --- Options ---
+Options\ScrollBar.lua
+Options\Defaults.lua
+Options\Bridge.lua
+Options\OptionElements.lua
+Options\NumberSelect.lua
+Options\TabOrder.lua
+Options\Panel.lua
+Options\Title.lua
+Options\Controls.lua
+
+Options\Tabs\Info_Tab.lua
+Options\Tabs\Thresholds_Tab.lua
+Options\Tabs\Layout_Tab.lua
+Options\Tabs\Ignore_Tab.lua
+Options\Tabs\Customize_Tab.lua
+Options\Tabs\Alerts_Tab.lua
