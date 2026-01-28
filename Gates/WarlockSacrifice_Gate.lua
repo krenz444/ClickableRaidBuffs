@@ -15,6 +15,11 @@ local function PlayerClassID()
   local id = clickableRaidBuffCache and clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.playerClassId
   if id then return id end
   local _, _, cid = UnitClass("player")
+
+  if issecretvalue and issecretvalue(cid) then
+    return 0 -- Fallback if secret
+  end
+
   return cid
 end
 

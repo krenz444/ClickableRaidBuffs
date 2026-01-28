@@ -26,7 +26,13 @@ local function DB() return (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB 
 
 local function InCombat() return InCombatLockdown() end
 local function IsDeadOrGhostNow() return UnitIsDeadOrGhost("player") end
-local function PlayerIsWarlock() local _,c=UnitClass("player"); return c=="WARLOCK" end
+local function PlayerIsWarlock()
+    local _,c=UnitClass("player")
+    if issecretvalue and issecretvalue(c) then
+        return clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.playerClassId == 9
+    end
+    return c=="WARLOCK"
+end
 local function IsRested() return (clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.restedXPArea) or IsResting() end
 local function InInstance() return (clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.inInstance) or select(1, IsInInstance()) end
 local function IsGrouped() return IsInGroup() or IsInRaid() end
@@ -78,12 +84,12 @@ local function HasWarlockInGroup()
   if IsInRaid() then
     for i=1,GetNumGroupMembers() do
       local _,class=UnitClass("raid"..i)
-      if class=="WARLOCK" then return true end
+      if not (issecretvalue and issecretvalue(class)) and class=="WARLOCK" then return true end
     end
   elseif IsInGroup() then
     for i=1,GetNumGroupMembers()-1 do
       local _,class=UnitClass("party"..i)
-      if class=="WARLOCK" then return true end
+      if not (issecretvalue and issecretvalue(class)) and class=="WARLOCK" then return true end
     end
   end
   return false

@@ -37,15 +37,23 @@ local TRUNCATE_N = 6
 -- Gets a short name from a unit ID (removes realm).
 local function ShortNameFromUnit(unit)
     local name = UnitName(unit)
-    if not name or name == "" then return nil end
+    if issecretvalue and issecretvalue(name) then return nil end
+    if not name then return nil end
+
+    local ok, empty = pcall(function() return name == "" end)
+    if not ok or empty then return nil end
+
     return name
 end
 
 -- Truncates a name to a fixed length.
 local function TruncatedShort(name)
+    if issecretvalue and issecretvalue(name) then return nil end
     if not name then return nil end
     if TRUNCATE_N and TRUNCATE_N > 0 then
-        return name:sub(1, TRUNCATE_N)
+        local ok, res = pcall(function() return name:sub(1, TRUNCATE_N) end)
+        if ok then return res end
+        return nil
     end
     return name
 end
@@ -89,11 +97,29 @@ local function UnitHasMyAuraForRow(unit, row)
     while true do
         local aura = C_UnitAuras.GetAuraDataByIndex(unit, i, "HELPFUL")
         if not aura then break end
-        if aura.sourceUnit and UnitIsUnit(aura.sourceUnit, "player") then
+
+        local isSecret = false
+        if issecretvalue and (issecretvalue(aura.sourceUnit) or issecretvalue(aura.name) or issecretvalue(aura.spellId)) then
+            isSecret = true
+        end
+
+        local isMine = false
+        if not isSecret and aura.sourceUnit then
+            local ok, result = pcall(UnitIsUnit, aura.sourceUnit, "player")
+            if ok and result then
+                isMine = true
+            end
+        end
+
+        if isMine then
             if wantByName then
-                if aura.name == wantByName then return true end
+                local ok, match = pcall(function() return aura.name == wantByName end)
+                if ok and match then return true end
             else
-                if aura.spellId and idLookup[aura.spellId] then return true end
+                if aura.spellId then
+                    local ok, match = pcall(function() return idLookup[aura.spellId] end)
+                    if ok and match then return true end
+                end
             end
         end
         i = i + 1

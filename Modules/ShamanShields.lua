@@ -56,11 +56,13 @@ end
 -- Gets a short name from a unit ID.
 local function shortName(unit)
   local n = UnitName(unit)
+  if issecretvalue and issecretvalue(n) then return nil end
   return (n and n ~= "") and n or nil
 end
 
 -- Truncates a name to a fixed length.
 local function truncName(s)
+  if issecretvalue and issecretvalue(s) then return nil end
   return (s and s:sub(1, TRUNC_N)) or s
 end
 
@@ -85,8 +87,22 @@ local function auraRem(unit, buffId, mineOnly)
   while true do
     local a = C_UnitAuras.GetAuraDataByIndex(unit, i, "HELPFUL")
     if not a then break end
+
+    local isSecret = false
+    if issecretvalue and (issecretvalue(a.sourceUnit) or issecretvalue(a.name) or issecretvalue(a.spellId)) then
+      isSecret = true
+    end
+
+    local isMine = false
+    if not isSecret and a.sourceUnit then
+      local ok, result = pcall(UnitIsUnit, a.sourceUnit, "player")
+      if ok and result then
+        isMine = true
+      end
+    end
+
     if a.spellId == buffId then
-      if not mineOnly or (a.sourceUnit and UnitIsUnit(a.sourceUnit, "player")) then
+      if not mineOnly or isMine then
         if a.expirationTime and a.expirationTime > 0 then
           return a.expirationTime - GetTime()
         else
@@ -186,7 +202,21 @@ local function learnEarthFixedFrom(unit, ES)
   while true do
     local a = C_UnitAuras.GetAuraDataByIndex(unit, i, "HELPFUL")
     if not a then break end
-    if a.spellId == want and a.sourceUnit and UnitIsUnit(a.sourceUnit, "player") then
+
+    local isSecret = false
+    if issecretvalue and (issecretvalue(a.sourceUnit) or issecretvalue(a.name) or issecretvalue(a.spellId)) then
+      isSecret = true
+    end
+
+    local isMine = false
+    if not isSecret and a.sourceUnit then
+      local ok, result = pcall(UnitIsUnit, a.sourceUnit, "player")
+      if ok and result then
+        isMine = true
+      end
+    end
+
+    if a.spellId == want and isMine then
       local who = shortName(unit)
       local me  = shortName("player")
       if who and who ~= me and DB().fixedTargets[974] ~= who then

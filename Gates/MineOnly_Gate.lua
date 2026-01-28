@@ -20,7 +20,20 @@ end
 
 local function _auraMatchesMineOnly(a, idSet, nameSet, nameMode)
   if not a then return false end
-  local byPlayer = a.sourceUnit and UnitIsUnit(a.sourceUnit, "player")
+
+  local isSecret = false
+  if issecretvalue and (issecretvalue(a.sourceUnit) or issecretvalue(a.name) or issecretvalue(a.spellId)) then
+    isSecret = true
+  end
+
+  local byPlayer = false
+  if not isSecret and a.sourceUnit then
+    local ok, result = pcall(UnitIsUnit, a.sourceUnit, "player")
+    if ok and result then
+      byPlayer = true
+    end
+  end
+
   if not byPlayer then return false end
   if idSet and a.spellId and idSet[a.spellId] then return true end
   if nameMode and nameSet and a.name and nameSet[a.name] then return true end

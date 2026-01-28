@@ -17,6 +17,13 @@ end
 function getPlayerClass()
     if InCombatLockdown() then return clickableRaidBuffCache.playerInfo.playerClassId end
     local _, _, classId = UnitClass("player")
+
+    -- Handle potential secret return from UnitClass (though usually only first return is secret)
+    if issecretvalue and issecretvalue(classId) then
+        -- If classId is secret, fallback to cached value if available, or 0
+        return clickableRaidBuffCache.playerInfo.playerClassId or 0
+    end
+
     clickableRaidBuffCache.playerInfo.playerClassId = classId
     return classId
 end

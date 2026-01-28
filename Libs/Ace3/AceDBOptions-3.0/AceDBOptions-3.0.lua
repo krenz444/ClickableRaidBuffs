@@ -319,11 +319,16 @@ end
 
 --[[ fill defaultProfiles with some generic values ]]
 local function generateDefaultProfiles(db)
+	local class = UnitClass("player")
+	if issecretvalue and issecretvalue(class) then
+		class = "Unknown"
+	end
+
 	defaultProfiles = {
 		["Default"] = L["default"],
 		[db.keys.char] = db.keys.char,
 		[db.keys.realm] = db.keys.realm,
-		[db.keys.class] = UnitClass("player")
+		[db.keys.class] = class
 	}
 end
 

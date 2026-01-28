@@ -117,7 +117,11 @@ local function TickRangeGate()
             local ret = C_Spell.IsSpellInRange(spellID, u)
             inRange = (ret == true)
           end
-          miss[#miss+1] = { unit = u, name = UnitName(u), inRange = inRange }
+
+          local uName = UnitName(u)
+          if issecretvalue and issecretvalue(uName) then uName = nil end
+
+          miss[#miss+1] = { unit = u, name = uName, inRange = inRange }
           if inRange then
             foundInRange = true
             break

@@ -58,7 +58,21 @@ local function auraRemOnPlayer(buffId)
   while true do
     local a = C_UnitAuras.GetAuraDataByIndex("player", i, "HELPFUL")
     if not a then break end
-    if a.spellId == buffId and a.sourceUnit and UnitIsUnit(a.sourceUnit, "player") then
+
+    local isSecret = false
+    if issecretvalue and (issecretvalue(a.sourceUnit) or issecretvalue(a.name) or issecretvalue(a.spellId)) then
+      isSecret = true
+    end
+
+    local isMine = false
+    if not isSecret and a.sourceUnit then
+      local ok, result = pcall(UnitIsUnit, a.sourceUnit, "player")
+      if ok and result then
+        isMine = true
+      end
+    end
+
+    if a.spellId == buffId and isMine then
       if a.expirationTime and a.expirationTime > 0 then
         return a.expirationTime - GetTime()
       else

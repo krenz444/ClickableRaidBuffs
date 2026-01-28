@@ -1,10 +1,7 @@
 -- ====================================
 -- \UI\Render.lua
 -- ====================================
--- This file handles the core rendering system for all addon icons.
--- Manages icon layout (horizontal/vertical/grid), positioning, textures,
--- cooldowns, glows, and all visual elements. Uses LibCustomGlow for effects.
--- Coordinates with Core/UpdateBus for state changes and UI/VisualCore for frame creation.
+-- This file handles the main rendering logic for the addon's icons.
 
 local addonName, ns = ...
 local parent, overlay, hover = ns.RenderParent, ns.Overlay, ns.Hover
@@ -518,10 +515,6 @@ function ns.RenderAll()
   ns.Overlay:SetSize(parentW + pad, parentH + pad)
   ns.Hover:ClearAllPoints();   ns.Hover:SetPoint("CENTER", ns.RenderParent, "CENTER")
   ns.Hover:SetSize(parentW + pad, parentH + pad)
-
-  -- Local helper functions are redefined here (duplicates of lines 56-99) for performance
-  -- and scope isolation. These are called in tight loops during rendering, so local copies
-  -- avoid repeated namespace lookups and maintain clean function-level encapsulation.
 
   local function ResolveFontPath(name)
     if ns.Options and ns.Options.GetFontPathByName then

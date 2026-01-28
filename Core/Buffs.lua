@@ -41,7 +41,11 @@ function ns.GetPlayerBuffExpire(spellIDs, nameMode, infinite)
         while true do
             local aura = C_UnitAuras.GetAuraDataByIndex("player", j, "HELPFUL")
             if not aura then break end
-            if aura.name and nameLookup[aura.name] and not NAME_MODE_EXCLUDE[aura.spellId] then
+
+            local isSecret = false
+            if issecretvalue and (issecretvalue(aura.name) or issecretvalue(aura.spellId)) then isSecret = true end
+
+            if not isSecret and aura.name and nameLookup[aura.name] and not NAME_MODE_EXCLUDE[aura.spellId] then
                 return handleAura(aura)
             end
             j = j + 1
@@ -53,7 +57,11 @@ function ns.GetPlayerBuffExpire(spellIDs, nameMode, infinite)
         while true do
             local aura = C_UnitAuras.GetAuraDataByIndex("player", j, "HELPFUL")
             if not aura then break end
-            if aura.spellId and spellLookup[aura.spellId] then
+
+            local isSecret = false
+            if issecretvalue and issecretvalue(aura.spellId) then isSecret = true end
+
+            if not isSecret and aura.spellId and spellLookup[aura.spellId] then
                 return handleAura(aura)
             end
             j = j + 1
@@ -92,6 +100,11 @@ function ns.GetRaidBuffExpire(spellIDs, nameMode, infinite)
 
     local function matches(aura)
         if not aura then return false end
+
+        local isSecret = false
+        if issecretvalue and (issecretvalue(aura.name) or issecretvalue(aura.spellId)) then isSecret = true end
+        if isSecret then return false end
+
         if nameLookup then
             return aura.name and nameLookup[aura.name] and not NAME_MODE_EXCLUDE[aura.spellId]
         else
@@ -146,6 +159,10 @@ function ns.GetRaidBuffExpireMine(spellIDs, nameMode, infinite)
     end
 
     local function matchMine(aura)
+        local isSecret = false
+        if issecretvalue and (issecretvalue(aura.sourceUnit) or issecretvalue(aura.name) or issecretvalue(aura.spellId)) then isSecret = true end
+        if isSecret then return false end
+
         if not aura or not aura.sourceUnit then return false end
         if UnitGUID(aura.sourceUnit) ~= playerGUID then return false end
         if nameLookup then

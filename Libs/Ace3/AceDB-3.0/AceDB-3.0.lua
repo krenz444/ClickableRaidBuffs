@@ -738,3 +738,15 @@ for db in pairs(AceDB.db_registry) do
 		db.ResetProfile = DBObjectLib.ResetProfile
 	end
 end
+
+-- Fix for secret values in UnitName
+local function SafeUnitName(unit)
+    local name = UnitName(unit)
+    if issecretvalue and issecretvalue(name) then
+        return "Unknown"
+    end
+    return name
+end
+
+-- Override charKey to use SafeUnitName
+charKey = SafeUnitName("player") .. " - " .. realmKey

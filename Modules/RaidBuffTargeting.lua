@@ -27,10 +27,27 @@ end
 local function InMyGroup(unitOrName)
   if not unitOrName then return false end
   if InCombatLockdown() then return false end -- UnitName/UnitInParty/UnitInRaid may return secret values in combat
-  if UnitExists(unitOrName) then return UnitInParty(unitOrName) or UnitInRaid(unitOrName) or UnitIsUnit(unitOrName,"player") end
+
+  -- Check for secret values before using unitOrName
+  if issecretvalue and issecretvalue(unitOrName) then return false end
+
+  if UnitExists(unitOrName) then
+      local ok, result = pcall(UnitIsUnit, unitOrName, "player")
+      if ok and result then return true end
+
+      ok, result = pcall(UnitInParty, unitOrName)
+      if ok and result then return true end
+
+      ok, result = pcall(UnitInRaid, unitOrName)
+      if ok and result then return true end
+  end
+
   for i=1,40 do
     local u = (IsInRaid() and ("raid"..i)) or ("party"..i)
-    if UnitExists(u) and UnitName(u) == unitOrName then return true end
+    if UnitExists(u) then
+        local name = UnitName(u)
+        if name and not (issecretvalue and issecretvalue(name)) and name == unitOrName then return true end
+    end
   end
   return (UnitName("player") == unitOrName)
 end

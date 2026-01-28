@@ -320,6 +320,10 @@ local function collectClassAbilitiesByClass()
   end
 
   local playerClassKey = select(2, UnitClass("player"))
+  if issecretvalue and issecretvalue(playerClassKey) then
+    playerClassKey = "Unknown"
+  end
+
   local playerClassID = classIDFromKey(playerClassKey) or 0
 
   local tmp = {}
@@ -875,7 +879,7 @@ O.RegisterSection(function(AddSection)
         local warlockSpells = { 688, 697, 691, 366222, 30146 }
         local wlItems = {}
         for _, sid in ipairs(warlockSpells) do
-          local nm = (C_Spell.GetSpellInfo and (C_Spell.GetSpellInfo(sid) or {}).name) or tostring(sid)
+          local nm  = (C_Spell.GetSpellInfo and (C_Spell.GetSpellInfo(sid) or {}).name) or tostring(sid)
           wlItems[#wlItems+1] = { id = sid, isItem = false, spellID = sid, name = nm, icon = select(1, GetSpellIconSafe(sid)) }
         end
         sortItems(wlItems)

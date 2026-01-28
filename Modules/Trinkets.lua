@@ -14,6 +14,11 @@ clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
 local function getPlayerClass()
   if InCombatLockdown() then return nil end
   local _, _, classID = UnitClass("player")
+
+  if issecretvalue and issecretvalue(classID) then
+    return clickableRaidBuffCache.playerInfo.playerClassId
+  end
+
   return classID
 end
 
@@ -86,8 +91,16 @@ function ns.Trinkets_OnUnitAura(unit, updateInfo)
 
   local function auraMatches(aura)
     if not aura then return false end
-    if aura.spellId and watchSpell[aura.spellId] then return true end
-    if aura.name    and watchName[aura.name]       then return true end
+
+    local isSecret = false
+    if issecretvalue and (issecretvalue(aura.name) or issecretvalue(aura.spellId)) then
+      isSecret = true
+    end
+
+    if not isSecret then
+      if aura.spellId and watchSpell[aura.spellId] then return true end
+      if aura.name    and watchName[aura.name]       then return true end
+    end
     return false
   end
 
@@ -173,7 +186,11 @@ function ns.Trinkets_Scan()
       while true do
         local a = C_UnitAuras.GetAuraDataByIndex(u,i,"HELPFUL")
         if not a then break end
-        if a.name==name then have=have+1; break end
+
+        local isSecret = false
+        if issecretvalue and issecretvalue(a.name) then isSecret = true end
+
+        if not isSecret and a.name==name then have=have+1; break end
         i=i+1
       end
     end
@@ -219,10 +236,18 @@ function ns.Trinkets_Scan()
       while true do
         local a = C_UnitAuras.GetAuraDataByIndex(u, i, "HELPFUL")
         if not a then break end
-        if targetName then
-          if a.name == targetName then found = true; break end
-        else
-          if a.spellId and wantById[a.spellId] then found = true; break end
+
+        local isSecret = false
+        if issecretvalue and (issecretvalue(a.name) or issecretvalue(a.spellId)) then
+          isSecret = true
+        end
+
+        if not isSecret then
+          if targetName then
+            if a.name == targetName then found = true; break end
+          else
+            if a.spellId and wantById[a.spellId] then found = true; break end
+          end
         end
         i = i + 1
       end
@@ -318,7 +343,11 @@ local function addEntry(rowKey, data, catName)
           while true do
             local a = C_UnitAuras.GetAuraDataByIndex(u, idx, "HELPFUL")
             if not a then break end
-            if a.name == name then matched = true; break end
+
+            local isSecret = false
+            if issecretvalue and issecretvalue(a.name) then isSecret = true end
+
+            if not isSecret and a.name == name then matched = true; break end
             idx = idx + 1
           end
           if matched then have = have + 1 end
@@ -386,7 +415,11 @@ local function addEntry(rowKey, data, catName)
           while true do
             local a = C_UnitAuras.GetAuraDataByIndex(u, idx, "HELPFUL")
             if not a then break end
-            if a.name and nameSet[a.name] then matched = true; break end
+
+            local isSecret = false
+            if issecretvalue and issecretvalue(a.name) then isSecret = true end
+
+            if not isSecret and a.name and nameSet[a.name] then matched = true; break end
             idx = idx + 1
           end
           if matched then have = have + 1 end
@@ -405,7 +438,11 @@ local function addEntry(rowKey, data, catName)
           while true do
             local a = C_UnitAuras.GetAuraDataByIndex(u, idx, "HELPFUL")
             if not a then break end
-            if a.spellId and idSet[a.spellId] then matched = true; break end
+
+            local isSecret = false
+            if issecretvalue and issecretvalue(a.spellId) then isSecret = true end
+
+            if not isSecret and a.spellId and idSet[a.spellId] then matched = true; break end
             idx = idx + 1
           end
           if matched then have = have + 1 end
