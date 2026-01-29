@@ -1,16 +1,16 @@
 name: Wago Release
 
 on:
-  # Trigger 1: Automatic Release Creation
-  # When you create a tag (e.g., v1.0.0), this creates a "Stable" release on Wago.
   push:
+    # Trigger 1: Automatic Release Creation
+    # When you create a tag (e.g., v1.0.0), this creates a "Stable" release on Wago.
     tags:
       - 'v*'
-  # Trigger 2: Automatic Branch Updates
-  # When you push code to main, this creates an "Alpha" release on Wago.
-  branches:
-    - main
-    - master
+    # Trigger 2: Automatic Branch Updates
+    # When you push code to main, this creates an "Alpha" release on Wago.
+    branches:
+      - main
+      - master
 
 jobs:
   release:
