@@ -8,10 +8,10 @@ local addonName, ns = ...
 
 -- Helper to get the database
 local function DB()
-    local d = (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB
+    local d = (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB
     if type(d) ~= "table" then
-        _G.ClickableRaidBuffsDB = _G.ClickableRaidBuffsDB or {}
-        d = _G.ClickableRaidBuffsDB
+        _G.FurphyBuffButtonsDB = _G.FurphyBuffButtonsDB or {}
+        d = _G.FurphyBuffButtonsDB
     end
     d.fixedTargets = d.fixedTargets or {}
     return d
@@ -19,16 +19,16 @@ end
 
 -- Migrates legacy cache data to the new database structure.
 local function MigrateLegacyCache()
-    if type(_G.clickableRaidBuffCache) == "table"
-       and type(_G.clickableRaidBuffCache.fixedTargets) == "table" then
+    if type(_G.furphyBuffCache) == "table"
+       and type(_G.furphyBuffCache.fixedTargets) == "table" then
         local dst = DB().fixedTargets
-        local src = _G.clickableRaidBuffCache.fixedTargets
+        local src = _G.furphyBuffCache.fixedTargets
         for k, v in pairs(src) do
             if dst[k] == nil and type(k) == "number" and type(v) == "string" and v ~= "" then
                 dst[k] = v
             end
         end
-        _G.clickableRaidBuffCache.fixedTargets = nil
+        _G.furphyBuffCache.fixedTargets = nil
     end
 end
 
@@ -62,13 +62,13 @@ end
 -- Skipped during combat.
 local function BuildTrackedSpellList()
     if InCombatLockdown() then return {} end
-    local classID = _G.clickableRaidBuffCache
-        and _G.clickableRaidBuffCache.playerInfo
-        and _G.clickableRaidBuffCache.playerInfo.playerClassId
+    local classID = _G.furphyBuffCache
+        and _G.furphyBuffCache.playerInfo
+        and _G.furphyBuffCache.playerInfo.playerClassId
     if not classID and type(ns.getPlayerClass) == "function" then
         classID = ns.getPlayerClass()
     end
-    local tbl = classID and _G.ClickableRaidData and _G.ClickableRaidData[classID]
+    local tbl = classID and _G.FurphyBuffData and _G.FurphyBuffData[classID]
     local out = {}
     if not tbl then return out end
     for spellID, data in pairs(tbl) do
@@ -187,7 +187,7 @@ end
 -- Skipped during combat.
 function ns.FixedTarget_InjectIcons()
     if InCombatLockdown() then return end
-    local display = _G.clickableRaidBuffCache and _G.clickableRaidBuffCache.displayable
+    local display = _G.furphyBuffCache and _G.furphyBuffCache.displayable
     if not display then return end
     local rb = display.RAID_BUFFS
     if not rb then return end

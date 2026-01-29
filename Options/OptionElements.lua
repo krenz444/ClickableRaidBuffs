@@ -22,7 +22,7 @@ function ns.SyncOptions()
   end
 end
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 local defaults = O.DEFAULTS or {}
 
 -- Theme constants for UI elements.
@@ -76,11 +76,11 @@ local function NotifyChanged()
     _pendingOptionsRefresh = false
     if O and _safeCall(O.OnOptionChanged) then return end
     if ns and (_safeCall(ns.RequestRebuild) or _safeCall(ns.RebuildDisplayables) or _safeCall(ns.RefreshEverything) or _safeCall(ns.PushRender) or _safeCall(ns.RenderAll)) then return end
-    if _G and (_safeCall(_G.ClickableRaidBuffs_Rebuild) or _safeCall(_G.ClickableRaidBuffs_ForceRefresh) or _safeCall(_G.ClickableRaidBuffs_PushRender)) then return end
+    if _G and (_safeCall(_G.FurphyBuffButtons_Rebuild) or _safeCall(_G.FurphyBuffButtons_ForceRefresh) or _safeCall(_G.FurphyBuffButtons_PushRender)) then return end
   end)
 end
 
-local POPUP_KEY = "CRB_CONFIRM_RESET"
+local POPUP_KEY = "FBB_CONFIRM_RESET"
 if not StaticPopupDialogs[POPUP_KEY] then
   StaticPopupDialogs[POPUP_KEY] = {
     text = "%s",
@@ -126,24 +126,24 @@ end
 local function _setTooltipFont()
   local face = (O and O.ResolvePanelFont and O.ResolvePanelFont()) or "Fonts\\FRIZQT__.TTF"
   if GameTooltipText then
-    GameTooltipText._crbOld = { GameTooltipText:GetFont() }
+    GameTooltipText._fbbOld = { GameTooltipText:GetFont() }
     GameTooltipText:SetFont(face, select(2, GameTooltipText:GetFont()))
   end
   if GameTooltipHeaderText then
-    GameTooltipHeaderText._crbOld = { GameTooltipHeaderText:GetFont() }
+    GameTooltipHeaderText._fbbOld = { GameTooltipHeaderText:GetFont() }
     GameTooltipHeaderText:SetFont(face, select(2, GameTooltipHeaderText:GetFont()))
   end
   if GameTooltipTextSmall then
-    GameTooltipTextSmall._crbOld = { GameTooltipTextSmall:GetFont() }
+    GameTooltipTextSmall._fbbOld = { GameTooltipTextSmall:GetFont() }
     GameTooltipTextSmall:SetFont(face, select(2, GameTooltipTextSmall:GetFont()))
   end
 end
 -- Restores tooltip font.
 local function _restoreTooltipFont()
   local function restore(obj)
-    if obj and obj._crbOld then
-      obj:SetFont(obj._crbOld[1], obj._crbOld[2], obj._crbOld[3])
-      obj._crbOld = nil
+    if obj and obj._fbbOld then
+      obj:SetFont(obj._fbbOld[1], obj._fbbOld[2], obj._fbbOld[3])
+      obj._fbbOld = nil
     end
   end
   restore(GameTooltipText); restore(GameTooltipHeaderText); restore(GameTooltipTextSmall)
@@ -606,8 +606,8 @@ local function buildFontPickerCell(parent, args)
     local defApply = function() applyFont(defaultFont) end
     local what = (args and args.label) or key or "Font"
     local msg = "Reset "..what.." to default?"
-    if StaticPopupDialogs["CRB_CONFIRM_RESET"] then
-      StaticPopup_Show("CRB_CONFIRM_RESET", msg, nil, { run = defApply })
+    if StaticPopupDialogs["FBB_CONFIRM_RESET"] then
+      StaticPopup_Show("FBB_CONFIRM_RESET", msg, nil, { run = defApply })
     else
       defApply()
     end

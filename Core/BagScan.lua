@@ -5,17 +5,17 @@
 -- and updating the displayable list based on what is found and current buffs.
 
 local addonName, ns = ...
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.playerInfo = clickableRaidBuffCache.playerInfo or {}
-clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
-clickableRaidBuffCache.functions   = clickableRaidBuffCache.functions   or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.playerInfo = furphyBuffCache.playerInfo or {}
+furphyBuffCache.displayable = furphyBuffCache.displayable or {}
+furphyBuffCache.functions   = furphyBuffCache.functions   or {}
 
 -- Helper to get the database
-local function DB() return (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {} end
 
 -- Retrieves the list of spell IDs that count as "Well Fed".
 local function GetWellFedIDs()
-  local wf = ClickableRaidData and ClickableRaidData["WELLFED"]
+  local wf = FurphyBuffData and FurphyBuffData["WELLFED"]
   if type(wf) == "table" and #wf > 0 then return wf end
   return nil
 end
@@ -109,17 +109,17 @@ end
 -- Updates or inserts a food or flask entry into the displayable list.
 local function UpsertFoodOrFlask(cat, itemID, data, qty, wellFedExpire, flaskExpire, playerLevel, inInstance, rested)
   if ns.IsExcluded and ns.IsExcluded(itemID) then
-    local map = clickableRaidBuffCache.displayable[cat]
+    local map = furphyBuffCache.displayable[cat]
     if map and map[itemID] then Release(cat, map[itemID]); map[itemID] = nil end
     return
   end
   if qty <= 0 or not passesGates(data, playerLevel, inInstance, rested) then
-    local map = clickableRaidBuffCache.displayable[cat]
+    local map = furphyBuffCache.displayable[cat]
     if map and map[itemID] then Release(cat, map[itemID]); map[itemID] = nil end
     return
   end
 
-  local map = clickableRaidBuffCache.displayable[cat] or {}; clickableRaidBuffCache.displayable[cat] = map
+  local map = furphyBuffCache.displayable[cat] or {}; furphyBuffCache.displayable[cat] = map
   local entry = map[itemID]
   if not entry then entry = Acquire(cat, data); map[itemID] = entry else setmetatable(entry, nil); setmetatable(entry, { __index = data }) end
 
@@ -137,31 +137,31 @@ end
 local function UpsertWeaponEnchant(cat, itemID, data, hand, qty, playerLevel, inInstance, rested)
   local handType, enchantable = ns.WeaponEnchants_EquippedHandTypeAndEnchantable(hand)
   if not enchantable then
-    local map = clickableRaidBuffCache.displayable[cat]; if map and map[itemID] then Release(cat, map[itemID]); map[itemID] = nil end
+    local map = furphyBuffCache.displayable[cat]; if map and map[itemID] then Release(cat, map[itemID]); map[itemID] = nil end
     return
   end
   local reqSlot = ns.WeaponEnchants_NormalizeSlotType(data and data.slotType)
   if reqSlot and handType and reqSlot ~= handType then
-    local map = clickableRaidBuffCache.displayable[cat]; if map and map[itemID] then Release(cat, map[itemID]); map[itemID] = nil end
+    local map = furphyBuffCache.displayable[cat]; if map and map[itemID] then Release(cat, map[itemID]); map[itemID] = nil end
     return
   end
 
   local reqCat = data and data.weaponType
   if reqCat and not ns.WeaponEnchants_MatchesCategory(hand, reqCat) then
-    local map = clickableRaidBuffCache.displayable[cat]; if map and map[itemID] then Release(cat, map[itemID]); map[itemID] = nil end
+    local map = furphyBuffCache.displayable[cat]; if map and map[itemID] then Release(cat, map[itemID]); map[itemID] = nil end
     return
   end
 
   if ns.IsExcluded and ns.IsExcluded(itemID) then
-    local map = clickableRaidBuffCache.displayable[cat]; if map and map[itemID] then Release(cat, map[itemID]); map[itemID] = nil end
+    local map = furphyBuffCache.displayable[cat]; if map and map[itemID] then Release(cat, map[itemID]); map[itemID] = nil end
     return
   end
   if qty <= 0 or not passesGates(data, playerLevel, inInstance, rested) then
-    local map = clickableRaidBuffCache.displayable[cat]; if map and map[itemID] then Release(cat, map[itemID]); map[itemID] = nil end
+    local map = furphyBuffCache.displayable[cat]; if map and map[itemID] then Release(cat, map[itemID]); map[itemID] = nil end
     return
   end
 
-  local map = clickableRaidBuffCache.displayable[cat] or {}; clickableRaidBuffCache.displayable[cat] = map
+  local map = furphyBuffCache.displayable[cat] or {}; furphyBuffCache.displayable[cat] = map
   local entry = map[itemID]
   if not entry then entry = Acquire(cat, data); map[itemID] = entry else setmetatable(entry, nil); setmetatable(entry, { __index = data }) end
 
@@ -227,19 +227,19 @@ end
 
 -- Re-evaluates thresholds for all bag items (food, flasks, enchants).
 function ns.ReapplyBagThresholds()
-  local pi   = clickableRaidBuffCache.playerInfo or {}
+  local pi   = furphyBuffCache.playerInfo or {}
   local wf   = GetWellFedExpire()
   local flask= pi.flaskExpireTime
   local threshold = EffectiveItemThresholdSecs()
 
-  local mapF = clickableRaidBuffCache.displayable.FOOD or {}
+  local mapF = furphyBuffCache.displayable.FOOD or {}
   for _, entry in pairs(mapF) do applyThreshold(entry, wf, threshold) end
 
-  local mapPh = clickableRaidBuffCache.displayable.FLASK or {}
+  local mapPh = furphyBuffCache.displayable.FLASK or {}
   for _, entry in pairs(mapPh) do applyThreshold(entry, flask, threshold) end
 
-  local mhMap = clickableRaidBuffCache.displayable.MAIN_HAND or {}
-  local ohMap = clickableRaidBuffCache.displayable.OFF_HAND  or {}
+  local mhMap = furphyBuffCache.displayable.MAIN_HAND or {}
+  local ohMap = furphyBuffCache.displayable.OFF_HAND  or {}
 
   local mhExpire = GetSlotExpire("mainHand")
   local ohExpire = GetSlotExpire("offHand")
@@ -259,14 +259,14 @@ function scanAllBags()
   if InCombatLockdown() then return end
 
   if ConsumablesSuppressed() then
-    local d = clickableRaidBuffCache.displayable
+    local d = furphyBuffCache.displayable
     d.FOOD, d.FLASK, d.MAIN_HAND, d.OFF_HAND = {}, {}, {}, {}
     return
   end
 
-  local playerLevel = clickableRaidBuffCache.playerInfo.playerLevel or UnitLevel("player") or 999
-  local inInstance  = clickableRaidBuffCache.playerInfo.inInstance or select(1, IsInInstance())
-  local rested      = clickableRaidBuffCache.playerInfo.restedXPArea or IsResting()
+  local playerLevel = furphyBuffCache.playerInfo.playerLevel or UnitLevel("player") or 999
+  local inInstance  = furphyBuffCache.playerInfo.inInstance or select(1, IsInInstance())
+  local rested      = furphyBuffCache.playerInfo.restedXPArea or IsResting()
 
   local dirty, haveDirty = {}, false
   if ns.ConsumeDirtyBags then haveDirty = (ns.ConsumeDirtyBags(dirty) or 0) > 0 end
@@ -287,12 +287,12 @@ function scanAllBags()
   for itemID in pairs(seen) do count[itemID] = C_Item.GetItemCount(itemID, false, false, false, false) or 0 end
 
   local wfExpire    = GetWellFedExpire()
-  local flaskExpire = clickableRaidBuffCache.playerInfo.flaskExpireTime
+  local flaskExpire = furphyBuffCache.playerInfo.flaskExpireTime
 
-  local FOOD   = ClickableRaidData and ClickableRaidData["FOOD"]      or nil
-  local FLASK  = ClickableRaidData and ClickableRaidData["FLASK"]     or nil
-  local MH     = ClickableRaidData and ClickableRaidData["MAIN_HAND"] or nil
-  local OH     = ClickableRaidData and ClickableRaidData["OFF_HAND"]  or nil
+  local FOOD   = FurphyBuffData and FurphyBuffData["FOOD"]      or nil
+  local FLASK  = FurphyBuffData and FurphyBuffData["FLASK"]     or nil
+  local MH     = FurphyBuffData and FurphyBuffData["MAIN_HAND"] or nil
+  local OH     = FurphyBuffData and FurphyBuffData["OFF_HAND"]  or nil
 
   local touched = { FOOD = {}, FLASK = {}, MAIN_HAND = {}, OFF_HAND = {} }
 
@@ -316,7 +316,7 @@ function scanAllBags()
     end
   end
 
-  local disp = clickableRaidBuffCache.displayable
+  local disp = furphyBuffCache.displayable
   for cat, mark in pairs(touched) do
     local map = disp[cat]
     if map then

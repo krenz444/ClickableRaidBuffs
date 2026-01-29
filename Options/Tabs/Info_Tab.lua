@@ -41,7 +41,7 @@ end
 
 -- Checks if the minimap button is currently hidden.
 local function GetMinimapHidden()
-  local addon = LibStub("AceAddon-3.0"):GetAddon("ClickableRaidBuffs", true)
+  local addon = LibStub("AceAddon-3.0"):GetAddon("FurphyBuffButtons", true)
   if addon and addon.minimapDB and addon.minimapDB.profile and addon.minimapDB.profile.minimap then
     return addon.minimapDB.profile.minimap.hide and true or false
   end
@@ -92,21 +92,21 @@ O.RegisterSection(function(AddSection)
     local body = contentFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
     body:SetPoint("TOPLEFT", icon, "BOTTOMLEFT", 0, -20)
     body:SetWidth(550)
-    body:SetFont("Interface\\AddOns\\ClickableRaidBuffs\\Media\\Fonts\\Fira_Sans\\FiraSans-Medium.ttf", 50, "")
+    body:SetFont("Interface\\AddOns\\FurphyBuffButtons\\Media\\Fonts\\Fira_Sans\\FiraSans-Medium.ttf", 50, "")
     body:SetJustifyH("CENTER")
-    body:SetText("|cff00ccff/crb     /buff|r")
+    body:SetText("|cff00ccff/fbb     /buff|r")
 
     local body2 = contentFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
     body2:SetPoint("TOP", body, "BOTTOM", 0, -20)
     body2:SetWidth(550)
-    body2:SetFont("Interface\\AddOns\\ClickableRaidBuffs\\Media\\Fonts\\Fira_Sans\\FiraSans-Medium.ttf", 16, "")
+    body2:SetFont("Interface\\AddOns\\FurphyBuffButtons\\Media\\Fonts\\Fira_Sans\\FiraSans-Medium.ttf", 16, "")
     body2:SetJustifyH("LEFT")
     body2:SetText(
       "Commands:\n" ..
-      "      |cFF00ccff/crb /buff|r |cffff7d0Funlock|r  -  Toggle icon lock\n" ..
-      "      |cFF00ccff/crb /buff|r |cffff7d0Flock|r  -  Toggle icon lock\n" ..
-      "      |cFF00ccff/crb /buff|r |cffff7d0Fminimap|r  -  Toggle minimap icon\n" ..
-      "      |cFF00ccff/crb /buff|r |cffff7d0Freset|r  -  Reset all settings to default and reload UI"
+      "      |cFF00ccff/fbb /buff|r |cffff7d0Funlock|r  -  Toggle icon lock\n" ..
+      "      |cFF00ccff/fbb /buff|r |cffff7d0Flock|r  -  Toggle icon lock\n" ..
+      "      |cFF00ccff/fbb /buff|r |cffff7d0Fminimap|r  -  Toggle minimap icon\n" ..
+      "      |cFF00ccff/fbb /buff|r |cffff7d0Freset|r  -  Reset all settings to default and reload UI"
     )
 
     local unlockCB = CreateFrame("CheckButton", nil, inner, "BackdropTemplate")
@@ -145,7 +145,7 @@ O.RegisterSection(function(AddSection)
     local ver = contentFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
     ver:SetPoint("TOPLEFT", inner, "TOPLEFT", -45, -12)
     ver:SetWidth(200)
-    ver:SetFont("Interface\\AddOns\\ClickableRaidBuffs\\Media\\Fonts\\Fira_Sans\\FiraSans-ExtraBold.ttf", 22, "")
+    ver:SetFont("Interface\\AddOns\\FurphyBuffButtons\\Media\\Fonts\\Fira_Sans\\FiraSans-ExtraBold.ttf", 22, "")
     ver:SetJustifyH("RIGHT")
     ver:SetText("Version:  |cFF00ccff" .. ns.VERSION .."|r")
 
@@ -164,7 +164,7 @@ O.RegisterSection(function(AddSection)
     hideCB:SetScript("OnClick", function(self)
       local state = self:GetChecked()
       if self._tick then self._tick:SetShown(state) end
-      local addon = LibStub("AceAddon-3.0"):GetAddon("ClickableRaidBuffs", true)
+      local addon = LibStub("AceAddon-3.0"):GetAddon("FurphyBuffButtons", true)
       if addon and addon.ToggleMinimapButton then
         addon:ToggleMinimapButton(state)
       end

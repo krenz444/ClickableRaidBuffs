@@ -8,11 +8,11 @@ local addonName, ns = ...
 local NAME_TRUNCATE = 6
 
 local function DB()
-  return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {}
+  return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
 end
 
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.targetedRaid = clickableRaidBuffCache.targetedRaid or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.targetedRaid = furphyBuffCache.targetedRaid or {}
 
 -- Truncates a name to a specified length and removes realm name.
 local function ShortNameNoRealm(name)
@@ -98,7 +98,7 @@ local function OnUnitAura(unit, updateInfo)
   if InCombatLockdown() then return end -- Avoid processing aura updates in combat that might touch secret values
   if not updateInfo.addedAuras and not updateInfo.removedAuraInstanceIDs and not updateInfo.updatedAuraInstanceIDs then return end
 
-  local raid = ClickableRaidData and ClickableRaidData["RAID_BUFFS"]
+  local raid = FurphyBuffData and FurphyBuffData["RAID_BUFFS"]
   if type(raid) ~= "table" then return end
 
   local base = {}
@@ -110,7 +110,7 @@ local function OnUnitAura(unit, updateInfo)
 
   for castSpellID, baseEntry in pairs(base) do
       if baseEntry and baseEntry.count and WatchedSpell[castSpellID] then
-          local who = clickableRaidBuffCache.targetedRaid[castSpellID]
+          local who = furphyBuffCache.targetedRaid[castSpellID]
           if who and InMyGroup(who) then
               local sName = GetSpellName(castSpellID)
               if sName then

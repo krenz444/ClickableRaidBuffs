@@ -23,7 +23,7 @@ if not ns.GetFontObject then
     local key = tostring(fontName or "") .. ":" .. tostring(size or "") .. ":" .. ((outline and "OUTLINE") or "")
     local f = ns.FontObjects[key]
     if not f then
-      f = CreateFont("CRB_Font_" .. key)
+      f = CreateFont("FBB_Font_" .. key)
       f:SetFont(fontPath(fontName), tonumber(size) or 14, outline and "OUTLINE" or "")
       ns.FontObjects[key] = f
     end
@@ -37,16 +37,16 @@ if not ns.UpdateFontString then
     if not fs then return end
     local fo = ns.GetFontObject(fontName, size, outline)
     if fs:GetFontObject() ~= fo then fs:SetFontObject(fo) end
-    if fs._crb_text ~= text then
+    if fs._fbb_text ~= text then
       fs:SetText(text or "")
-      fs._crb_text = text
+      fs._fbb_text = text
     end
     if color then
       local r,g,b,a = color.r or 1, color.g or 1, color.b or 1, color.a or 1
-      local c = fs._crb_color
+      local c = fs._fbb_color
       if not c or c[1] ~= r or c[2] ~= g or c[3] ~= b or c[4] ~= a then
         fs:SetTextColor(r,g,b,a)
-        fs._crb_color = {r,g,b,a}
+        fs._fbb_color = {r,g,b,a}
       end
     end
   end

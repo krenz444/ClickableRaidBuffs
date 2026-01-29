@@ -6,7 +6,7 @@
 local addonName, ns = ...
 
 local function DB()
-  return (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+  return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
 end
 
 local DIFF_DELVE = 208
@@ -28,7 +28,7 @@ ns._delves_origRenderAll = ns._delves_origRenderAll
 
 -- Checks if an Augment Rune ID is consumable.
 local function isConsumableAugmentRuneByID(id)
-  local data = _G.ClickableRaidData and _G.ClickableRaidData.AUGMENT_RUNE
+  local data = _G.FurphyBuffData and _G.FurphyBuffData.AUGMENT_RUNE
   if type(data) ~= "table" then return false end
   local rec = data[id]
   if type(rec) ~= "table" then return false end
@@ -70,9 +70,9 @@ end
 
 -- Suppresses consumable items (food, flasks, etc.) from display.
 local function SuppressConsumables()
-  _G.clickableRaidBuffCache = _G.clickableRaidBuffCache or {}
-  _G.clickableRaidBuffCache.displayable = _G.clickableRaidBuffCache.displayable or {}
-  local d = _G.clickableRaidBuffCache.displayable
+  _G.furphyBuffCache = _G.furphyBuffCache or {}
+  _G.furphyBuffCache.displayable = _G.furphyBuffCache.displayable or {}
+  local d = _G.furphyBuffCache.displayable
   d.FOOD, d.FLASK, d.MAIN_HAND, d.OFF_HAND = {}, {}, {}, {}
   d.AUGMENT_RUNE = filterAugmentRunes(d.AUGMENT_RUNE)
 end

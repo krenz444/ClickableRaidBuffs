@@ -6,7 +6,7 @@
 local addonName, ns = ...
 
 local function DefaultSoundName() return "Alerts: Ding Dong" end
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 local function RAID()
   local d = DB()
   d.raidAnnouncer = d.raidAnnouncer or {}
@@ -56,7 +56,7 @@ ns.RaidAnnouncer_PlayPreview = PlayChosenSound
 local SPELL_TO_KEY = {}
 local function BuildSpellMap()
   wipe(SPELL_TO_KEY)
-  local src = ClickableRaidData and ClickableRaidData["ANNOUNCER"]
+  local src = FurphyBuffData and FurphyBuffData["ANNOUNCER"]
   if not src then return end
   for key, entry in pairs(src) do
     if entry and entry.spellID then
@@ -114,12 +114,17 @@ local function FreeMessage(f)
 end
 
 local function IsSuppressed()
-  if UnitIsDeadOrGhost("player") then return true end
+  local dead = UnitIsDeadOrGhost("player")
+  if issecretvalue and issecretvalue(dead) then dead = false end
+  if dead then return true end
+
   local r = RAID()
   if r.disableInCombat then
-    if (InCombatLockdown()) or (IsEncounterInProgress and IsEncounterInProgress()) then
-      return true
-    end
+    if InCombatLockdown() then return true end
+
+    local inEncounter = IsEncounterInProgress and IsEncounterInProgress()
+    if issecretvalue and issecretvalue(inEncounter) then inEncounter = false end
+    if inEncounter then return true end
   end
   return false
 end
@@ -224,7 +229,7 @@ function ns.RaidAnnouncer_ToggleMover(show)
       moverFS:SetFont(GetFontPath(), GetFontSize(), "OUTLINE")
       moverFS:SetPoint("CENTER")
       do local r,g,b = GetFontColor(); moverFS:SetTextColor(r,g,b) end
-      moverFS:SetText("Clickable Raid Buffs")
+      moverFS:SetText("Furphy Buff Buttons")
       local start = GetTime()
       mover:SetScript("OnUpdate", function()
         local t = GetTime() - start
@@ -282,7 +287,7 @@ function ns.RaidAnnouncer_ToggleMover(show)
       rtex:SetAllPoints(resetBtn)
       rtex:SetAtlas("common-icon-undo", true)
       resetBtn:SetScript("OnClick", function()
-        local KEY = "CRB_RA_CONFIRM_RESET"
+        local KEY = "FBB_RA_CONFIRM_RESET"
         if not StaticPopupDialogs[KEY] then
           StaticPopupDialogs[KEY] = { text = "Reset announcement position to default?", button1 = YES, button2 = NO,
             OnAccept = function() ns.RaidAnnouncer_TeleportMover(0, 180) end, timeout = 0, whileDead = 1, hideOnEscape = 1, preferredIndex = 3 }
@@ -297,6 +302,7 @@ function ns.RaidAnnouncer_ToggleMover(show)
 end
 
 local function IsGroupUnit(u)
+  if issecretvalue and issecretvalue(u) then return false end
   if u == "player" then return true end
   if u and (string.match(u, "^party%d+$") or string.match(u, "^raid%d+$")) then return true end
   return false
@@ -308,7 +314,7 @@ local function ResolveText(key, spellID)
     return (info and info.name) or "Portal Open"
   end
   return RAID().customText[key]
-    or ((ClickableRaidData and ClickableRaidData["ANNOUNCER"] and ClickableRaidData["ANNOUNCER"][key] and ClickableRaidData["ANNOUNCER"][key].text)
+    or ((FurphyBuffData and FurphyBuffData["ANNOUNCER"] and FurphyBuffData["ANNOUNCER"][key] and FurphyBuffData["ANNOUNCER"][key].text)
     or key)
 end
 
@@ -338,8 +344,13 @@ local recent = {}
 local function AnnounceWhitelisted(spellID, srcGUID)
   if issecretvalue and issecretvalue(spellID) then return end
   if not RAID().enabled or IsSuppressed() then return end
+
   local inInst, instType = IsInInstance()
+  if issecretvalue and issecretvalue(inInst) then inInst = false end
+  if issecretvalue and issecretvalue(instType) then instType = "none" end
+
   if not inInst or (instType ~= "raid" and instType ~= "party") then return end
+
   local key = SPELL_TO_KEY[spellID]; if not key then return end
   if srcGUID then
     local t = GetTime()
@@ -359,7 +370,14 @@ end
 
 local function HandleCast(unit, spellID)
   if not IsGroupUnit(unit) then return end
-  AnnounceWhitelisted(spellID, UnitGUID(unit))
+
+  -- Handle secret values for unit GUID
+  local guid = UnitGUID(unit)
+  if issecretvalue and issecretvalue(guid) then
+    guid = nil -- Fallback to no GUID if secret, might affect throttling but allows announcement
+  end
+
+  AnnounceWhitelisted(spellID, guid)
 end
 
 local f = CreateFrame("Frame")

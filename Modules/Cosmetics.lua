@@ -5,7 +5,7 @@
 
 local addonName, ns = ...
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 local function GetCosmeticSet() local d=DB(); d.cosmetics=d.cosmetics or {}; return d.cosmetics end
 
 -- Checks if an item is excluded by user settings.
@@ -21,7 +21,7 @@ local function SeedDefaultCosmeticExclusions()
   local d = DB()
   d.exclusions = d.exclusions or {}
   local ex = d.exclusions
-  local data = _G.ClickableRaidData and _G.ClickableRaidData["COSMETIC"]
+  local data = _G.FurphyBuffData and _G.FurphyBuffData["COSMETIC"]
   if type(data) ~= "table" then return end
   for itemID in pairs(data) do
     if type(itemID) == "number" and ex[itemID] == nil then
@@ -52,14 +52,14 @@ _login:SetScript("OnEvent", function()
   ns.Cosmetics_RebuildActive()
 end)
 
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.playerInfo = clickableRaidBuffCache.playerInfo or {}
-clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.playerInfo = furphyBuffCache.playerInfo or {}
+furphyBuffCache.displayable = furphyBuffCache.displayable or {}
 
 -- Ensures the display category for cosmetics exists.
 local function ensureCategory()
-  clickableRaidBuffCache.displayable["COSMETIC"] = clickableRaidBuffCache.displayable["COSMETIC"] or {}
-  return clickableRaidBuffCache.displayable["COSMETIC"]
+  furphyBuffCache.displayable["COSMETIC"] = furphyBuffCache.displayable["COSMETIC"] or {}
+  return furphyBuffCache.displayable["COSMETIC"]
 end
 
 -- Updates cooldown information for an item entry.
@@ -101,7 +101,7 @@ end
 -- Skipped during combat.
 local function envForGates()
   if InCombatLockdown() then return 0, false, false end
-  local pi = clickableRaidBuffCache.playerInfo or {}
+  local pi = furphyBuffCache.playerInfo or {}
   local lvl = pi.playerLevel or UnitLevel("player") or 0
   local inInst = (pi.inInstance ~= nil) and pi.inInstance or select(1, IsInInstance())
   local rested = (pi.restedXPArea ~= nil) and pi.restedXPArea or IsResting()
@@ -119,7 +119,7 @@ end
 -- Skipped during combat.
 local function scanBagsCosmetics(bagID)
   if InCombatLockdown() then return end
-  local dataTbl = _G.ClickableRaidData and _G.ClickableRaidData["COSMETIC"]
+  local dataTbl = _G.FurphyBuffData and _G.FurphyBuffData["COSMETIC"]
   if type(dataTbl) ~= "table" then return end
   local cat = ensureCategory()
   if bagID == 0 then wipe(cat) end
@@ -163,7 +163,7 @@ end
 -- Skipped during combat.
 local function scanCosmeticsAllBags()
   if InCombatLockdown() then return end
-  local dataTbl = _G.ClickableRaidData and _G.ClickableRaidData["COSMETIC"]
+  local dataTbl = _G.FurphyBuffData and _G.FurphyBuffData["COSMETIC"]
   if type(dataTbl) ~= "table" then return end
   wipe(ensureCategory())
   for bagID = 0, NUM_BAG_SLOTS do
@@ -222,7 +222,7 @@ function ns.Cosmetics_RefreshNow()
     if type(_G.scanAllBags) == "function" then _G.scanAllBags() end
     if ns.RenderAll then ns.RenderAll()
     elseif ns.PushRender then ns.PushRender()
-    elseif _G.ClickableRaidBuffs_PushRender then _G.ClickableRaidBuffs_PushRender() end
+    elseif _G.FurphyBuffButtons_PushRender then _G.FurphyBuffButtons_PushRender() end
   end)
 end
 
@@ -231,7 +231,7 @@ end
 local function recalcCosmeticTimers()
   if InCombatLockdown() then return end
   local cat = ensureCategory()
-  local dataTbl = _G.ClickableRaidData and _G.ClickableRaidData["COSMETIC"]
+  local dataTbl = _G.FurphyBuffData and _G.FurphyBuffData["COSMETIC"]
   if type(dataTbl) ~= "table" then return end
   for itemID, entry in pairs(cat) do
     local data = dataTbl[itemID]

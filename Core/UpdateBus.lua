@@ -78,15 +78,15 @@ local function _recomputeGates()
   if type(restedXPGate) == "function" then
     restedXPGate()
   else
-    clickableRaidBuffCache = clickableRaidBuffCache or { playerInfo = {} }
-    clickableRaidBuffCache.playerInfo.restedXPArea = IsResting()
+    furphyBuffCache = furphyBuffCache or { playerInfo = {} }
+    furphyBuffCache.playerInfo.restedXPArea = IsResting()
   end
   if type(instanceGate) == "function" then
     instanceGate()
   else
-    clickableRaidBuffCache = clickableRaidBuffCache or { playerInfo = {} }
+    furphyBuffCache = furphyBuffCache or { playerInfo = {} }
     local inInst = select(1, IsInInstance())
-    clickableRaidBuffCache.playerInfo.inInstance = inInst and true or false
+    furphyBuffCache.playerInfo.inInstance = inInst and true or false
   end
 end
 
@@ -99,7 +99,7 @@ local function _isConsumablesSuppressed()
   if inInst then
     local _, _, diffID = GetInstanceInfo()
     if diffID == 8 then
-      local ddb = (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+      local ddb = (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
       if ddb and ddb.mplusDisableConsumables == true then return true end
     end
   end
@@ -109,9 +109,9 @@ end
 -- Applies consumable suppression if active.
 local function _applyConsumableSuppressionIfActive()
   if not _isConsumablesSuppressed() then return false end
-  clickableRaidBuffCache = clickableRaidBuffCache or {}
-  clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
-  local d = clickableRaidBuffCache.displayable
+  furphyBuffCache = furphyBuffCache or {}
+  furphyBuffCache.displayable = furphyBuffCache.displayable or {}
+  local d = furphyBuffCache.displayable
   d.FOOD, d.FLASK, d.MAIN_HAND, d.OFF_HAND = {}, {}, {}, {}
   return true
 end

@@ -8,7 +8,7 @@ local addonName, ns = ...
 local O  = ns.Options
 local NS = ns.NumberSelect
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 local defaults = (O and O.DEFAULTS) or {}
 
 local KNOB = { ROW_H_TOP = 90 }

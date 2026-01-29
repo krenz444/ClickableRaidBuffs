@@ -5,8 +5,8 @@
 
 local addonName, ns = ...
 
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.displayable = furphyBuffCache.displayable or {}
 
 -- Determine faction-specific Traveler's Tundra Mammoth ID
 local englishFaction, _ = UnitFactionGroup("player")
@@ -19,7 +19,7 @@ local REPAIR_ICON_ID = 136241
 local PREFERRED_MOUNT_IDS = { ns and ns.SelectedMount, 1039, 460, 2237, ttmID }
 local chosenMountID = nil
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 local function InCombat() return InCombatLockdown() end
 
 local function IsDeadOrGhost()
@@ -73,14 +73,14 @@ end
 
 -- Ensures the display category for durability exists.
 local function ensureCat()
-  clickableRaidBuffCache.displayable[CAT] = clickableRaidBuffCache.displayable[CAT] or {}
-  return clickableRaidBuffCache.displayable[CAT]
+  furphyBuffCache.displayable[CAT] = furphyBuffCache.displayable[CAT] or {}
+  return furphyBuffCache.displayable[CAT]
 end
 
 -- Clears the durability display category.
 local function clearCat()
-  if clickableRaidBuffCache.displayable[CAT] then
-    wipe(clickableRaidBuffCache.displayable[CAT])
+  if furphyBuffCache.displayable[CAT] then
+    wipe(furphyBuffCache.displayable[CAT])
   end
 end
 
@@ -129,13 +129,13 @@ end
 local function AppendPercentAfterRender()
   if not ns.RenderFrames then return end
   for _, btn in ipairs(ns.RenderFrames) do
-    if btn:IsShown() and btn._crb_entry and btn._crb_entry.category == CAT then
-      if not btn._crb_center_from_cd then
-        local q = btn._crb_entry.quantity
+    if btn:IsShown() and btn._fbb_entry and btn._fbb_entry.category == CAT then
+      if not btn._fbb_center_from_cd then
+        local q = btn._fbb_entry.quantity
         local txt = (q and q > 0) and (tostring(q) .. "%") or ""
-        if btn._crb_centerText ~= txt then
+        if btn._fbb_centerText ~= txt then
           btn.centerText:SetText(txt)
-          btn._crb_centerText = txt
+          btn._fbb_centerText = txt
         end
       end
     end

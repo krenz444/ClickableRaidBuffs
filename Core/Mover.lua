@@ -7,9 +7,9 @@ local addonName, ns = ...
 
 -- Retrieves the saved position from the database.
 local function GetPos()
-    ClickableRaidBuffsDB = ClickableRaidBuffsDB or {}
-    ClickableRaidBuffsDB.position = ClickableRaidBuffsDB.position or { x = 0, y = 0 }
-    return ClickableRaidBuffsDB.position
+    FurphyBuffButtonsDB = FurphyBuffButtonsDB or {}
+    FurphyBuffButtonsDB.position = FurphyBuffButtonsDB.position or { x = 0, y = 0 }
+    return FurphyBuffButtonsDB.position
 end
 
 -- Create the main parent frame for rendering icons.
@@ -79,7 +79,7 @@ ns.NudgeMover = NudgeMover
 local function UpdateMoverSize()
     if not ns._mover or not parent then return end
     local w, h = parent:GetSize()
-    local size = (ClickableRaidBuffsDB.iconSize or ns.BASE_ICON_SIZE or 50)
+    local size = (FurphyBuffButtonsDB.iconSize or ns.BASE_ICON_SIZE or 50)
     local pad = size
     ns._mover:SetSize((w > 0 and w or 1) + pad*2, (h > 0 and h or 1) + pad*2)
 end
@@ -246,7 +246,7 @@ function ns.ToggleMover(show)
             rtex:SetAllPoints(resetBtn)
             rtex:SetAtlas("common-icon-undo", true)
             resetBtn:SetScript("OnClick", function()
-                local KEY = "CRB_MOVER_RESET_CONFIRM"
+                local KEY = "FBB_MOVER_RESET_CONFIRM"
                 if not StaticPopupDialogs[KEY] then
                     StaticPopupDialogs[KEY] = {
                         text = "Reset position to default?",
@@ -289,22 +289,22 @@ end
 parent:HookScript("OnSizeChanged", function() ns.UpdateMoverSize() end)
 
 -- Debugging tools
-function CRB_AddDBToDevTool()
+function FBB_AddDBToDevTool()
     if not DevTool then
         print("|cffff0000DevTool not loaded.|r")
         return
     end
-    if not ClickableRaidBuffsDB then
-        print("|cffff0000ClickableRaidBuffsDB not ready yet.|r")
+    if not FurphyBuffButtonsDB then
+        print("|cffff0000FurphyBuffButtonsDB not ready yet.|r")
         return
     end
-    DevTool:AddData(ClickableRaidBuffsDB, "ClickableRaidBuffsDB")
-    print("|cff00ccffCRB:|r DB added to DevTool.")
+    DevTool:AddData(FurphyBuffButtonsDB, "FurphyBuffButtonsDB")
+    print("|cff00ccffFBB:|r DB added to DevTool.")
 end
 
-function CRB_DebugPos()
+function FBB_DebugPos()
     local pos = GetPos()
-    print("|cff00ccffCRB:|r Current pos:", pos.x, pos.y)
+    print("|cff00ccffFBB:|r Current pos:", pos.x, pos.y)
 end
 
 local function ReapplyPosition()

@@ -5,7 +5,7 @@
 
 local addonName, ns = ...
 local function DB()
-  return (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+  return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
 end
 
 -- Checks if the current keystone is a test keystone.
@@ -194,7 +194,7 @@ function ns.MPlus_GetEffectiveThresholdSecs(kind, baseMinutes)
   local inInst, difficultyID, _, instanceMapID = InInstanceReal()
   if not inInst then return base * 60 end
   if isCurrentSeasonDungeonByMapID(instanceMapID) and difficultyID == DIFF_MYTHIC then
-    local d = (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+    local d = (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
     if d.mplusThresholdEnabled ~= false then
       local m = tonumber(d.mplusThreshold) or 45
       return m * 60

@@ -5,7 +5,7 @@
 local LSM = LibStub and LibStub("LibSharedMedia-3.0", true)
 if not LSM then return end
 
-local BASE = "Interface\\AddOns\\ClickableRaidBuffs\\Media\\Sounds\\"
+local BASE = "Interface\\AddOns\\FurphyBuffButtons\\Media\\Sounds\\"
 local DIR_SFX = BASE .. "SFX for gamesapps\\"
 local DIR_SWEET = BASE .. "SweetAlerts\\"
 local EXT = ".ogg"

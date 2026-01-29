@@ -31,7 +31,7 @@ local HUNTER_PETS_PSEUDO_ID = -7001
 
 -- Helper to get the database
 local function DB()
-  return (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+  return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
 end
 
 -- Internal state for caching exclusion sets
@@ -83,7 +83,7 @@ function M.IsExcluded(cat, entry)
   if not entry then return false end
 
   -- Determine which exclusion set to use based on category
-  local d = (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+  local d = (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
   local set = (RAIDLIKE and RAIDLIKE[cat]) and (d.raidBuffExclusions or {}) or (d.exclusions or {})
   if not set then return false end
 
@@ -94,7 +94,7 @@ function M.IsExcluded(cat, entry)
   ns._ExKeyCache = ns._ExKeyCache or setmetatable({}, { __mode = "k" })
   if not key then
     -- Search displayable cache to find this entry's key
-    local disp = _G.clickableRaidBuffCache and _G.clickableRaidBuffCache.displayable and _G.clickableRaidBuffCache.displayable[cat]
+    local disp = _G.furphyBuffCache and _G.furphyBuffCache.displayable and _G.furphyBuffCache.displayable[cat]
     if type(disp) == "table" then
       for k, v in pairs(disp) do
         if v == entry then key = k; break end

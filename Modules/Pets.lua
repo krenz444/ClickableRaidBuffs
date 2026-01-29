@@ -4,15 +4,15 @@
 -- This module handles the display of pet-related actions for Hunters (Call Pet, Revive Pet).
 
 local addonName, ns = ...
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.displayable = furphyBuffCache.displayable or {}
 
 local HUNTER_CLASSID = 3
 local HUNTER_DISABLE_PETS_SPELL = 1223323
 
 local function InCombat() return InCombatLockdown() end
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {} end
 local function HPDB() local d = DB(); d.hunterPets = d.hunterPets or {}; return d.hunterPets end
 
 -- Checks if a spell is known by the player.
@@ -24,13 +24,13 @@ end
 
 -- Ensures the display category for pets exists.
 local function ensureDisplayCat(cat)
-  clickableRaidBuffCache.displayable[cat] = clickableRaidBuffCache.displayable[cat] or {}
-  return clickableRaidBuffCache.displayable[cat]
+  furphyBuffCache.displayable[cat] = furphyBuffCache.displayable[cat] or {}
+  return furphyBuffCache.displayable[cat]
 end
 
 -- Clears the pet display category.
 local function clearDisplayCat(cat)
-  if clickableRaidBuffCache.displayable[cat] then wipe(clickableRaidBuffCache.displayable[cat]) end
+  if furphyBuffCache.displayable[cat] then wipe(furphyBuffCache.displayable[cat]) end
 end
 
 -- Checks if the player has a usable pet active.
@@ -46,8 +46,8 @@ end
 -- Retrieves the player's class ID.
 -- Returns cached value during combat.
 local function PlayerClassID()
-  if InCombat() then return clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.playerClassId end
-  return (clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.playerClassId)
+  if InCombat() then return furphyBuffCache.playerInfo and furphyBuffCache.playerInfo.playerClassId end
+  return (furphyBuffCache.playerInfo and furphyBuffCache.playerInfo.playerClassId)
          or (type(getPlayerClass)=="function" and getPlayerClass())
 end
 
@@ -127,7 +127,7 @@ local function buildPets()
   if InCombat() then return end
 
   local classID = PlayerClassID()
-  local tbl = ClickableRaidData and ClickableRaidData["PETS"]
+  local tbl = FurphyBuffData and FurphyBuffData["PETS"]
   if not tbl then clearDisplayCat("PETS"); return end
   if HasUsablePet() then clearDisplayCat("PETS"); return end
 

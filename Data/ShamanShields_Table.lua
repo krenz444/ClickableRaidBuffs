@@ -2,9 +2,9 @@
 -- \Data\ShamanShields_Table.lua
 -- ====================================
 
-ClickableRaidData = ClickableRaidData or {}
+FurphyBuffData = FurphyBuffData or {}
 
-ClickableRaidData["SHAMAN_SHIELDS"] = {
+FurphyBuffData["SHAMAN_SHIELDS"] = {
   [192106] = {
     name    = "Lightning Shield",
     spellID = 192106,

@@ -2,10 +2,10 @@
 -- \Data\CosmeticItems_Table.lua
 -- ====================================
 
-_G.ClickableRaidData = _G.ClickableRaidData or {}
-local ClickableRaidData = _G.ClickableRaidData
+_G.FurphyBuffData = _G.FurphyBuffData or {}
+local FurphyBuffData = _G.FurphyBuffData
 
-ClickableRaidData["COSMETIC"] = {
+FurphyBuffData["COSMETIC"] = {
   [8529]    = { name = "Noggenfogger Elixer",      itemID = 8529,   buffID = { 16591 }, },
   [124640]  = { name = "Inky Black Potion",        itemID = 124640, buffID = { 185394 }, gates = { "notMap", { notMap = 2215 }, }, }, 
   [204370]  = { name = "Stinky Bright Potion",     itemID = 204370, buffID = { 404840 }, gates = { "notMap", { notMap = 2215 }, }, }, 

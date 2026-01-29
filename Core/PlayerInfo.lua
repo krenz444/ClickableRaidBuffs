@@ -9,22 +9,22 @@ local addonName, ns = ...
 -- Skipped during combat to avoid potential taint or restricted API calls.
 function getPlayerLevel()
     if InCombatLockdown() then return end
-    clickableRaidBuffCache.playerInfo.playerLevel = UnitLevel("player")
+    furphyBuffCache.playerInfo.playerLevel = UnitLevel("player")
 end
 
 -- Updates and returns the cached player class ID.
 -- Returns cached value during combat.
 function getPlayerClass()
-    if InCombatLockdown() then return clickableRaidBuffCache.playerInfo.playerClassId end
+    if InCombatLockdown() then return furphyBuffCache.playerInfo.playerClassId end
     local _, _, classId = UnitClass("player")
 
     -- Handle potential secret return from UnitClass (though usually only first return is secret)
     if issecretvalue and issecretvalue(classId) then
         -- If classId is secret, fallback to cached value if available, or 0
-        return clickableRaidBuffCache.playerInfo.playerClassId or 0
+        return furphyBuffCache.playerInfo.playerClassId or 0
     end
 
-    clickableRaidBuffCache.playerInfo.playerClassId = classId
+    furphyBuffCache.playerInfo.playerClassId = classId
     return classId
 end
 
@@ -32,7 +32,7 @@ end
 -- Skipped during combat.
 function restedXPGate()
     if InCombatLockdown() then return end
-    clickableRaidBuffCache.playerInfo.restedXPArea = IsResting()
+    furphyBuffCache.playerInfo.restedXPArea = IsResting()
 end
 
 -- Updates the cached instance state (is the player in an instance).
@@ -40,7 +40,7 @@ end
 function instanceGate()
     if InCombatLockdown() then return end
     local inInstance = IsInInstance()
-    clickableRaidBuffCache.playerInfo.inInstance = inInstance
+    furphyBuffCache.playerInfo.inInstance = inInstance
 end
 
 -- Helper function to determine the type of weapons equipped (Bladed, Blunt, or Other).
@@ -79,8 +79,8 @@ end
 function updateWeaponTypes()
     if InCombatLockdown() then return end
     local weapTypes = getEquippedWeaponTypes()
-    clickableRaidBuffCache.playerInfo.mainHand = weapTypes.mainhand or nil
-    clickableRaidBuffCache.playerInfo.offHand  = weapTypes.offhand or nil
+    furphyBuffCache.playerInfo.mainHand = weapTypes.mainhand or nil
+    furphyBuffCache.playerInfo.offHand  = weapTypes.offhand or nil
 end
 
 -- Updates the cached weapon enchant expiration times.
@@ -88,7 +88,7 @@ end
 function updateWeaponEnchants()
     if InCombatLockdown() then return end
     local mh, mhTime, _, _, oh, ohTime = GetWeaponEnchantInfo()
-    clickableRaidBuffCache.playerInfo.weaponEnchants = {
+    furphyBuffCache.playerInfo.weaponEnchants = {
         mainhand = mh and (GetTime() + (mhTime/1000)) or nil,
         offhand  = oh and (GetTime() + (ohTime/1000)) or nil,
     }

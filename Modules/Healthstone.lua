@@ -5,8 +5,8 @@
 
 local addonName, ns = ...
 
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.displayable = furphyBuffCache.displayable or {}
 
 local CAT = "HEALTHSTONE"
 
@@ -22,19 +22,19 @@ local ICON_HEALTHSTONE          = 538745
 local ICON_DEMONIC_HEALTHSTONE  = 538744
 local ICON_SOULWELL             = 136194
 
-local function DB() return (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {} end
 
 local function InCombat() return InCombatLockdown() end
 local function IsDeadOrGhostNow() return UnitIsDeadOrGhost("player") end
 local function PlayerIsWarlock()
     local _,c=UnitClass("player")
     if issecretvalue and issecretvalue(c) then
-        return clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.playerClassId == 9
+        return furphyBuffCache.playerInfo and furphyBuffCache.playerInfo.playerClassId == 9
     end
     return c=="WARLOCK"
 end
-local function IsRested() return (clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.restedXPArea) or IsResting() end
-local function InInstance() return (clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.inInstance) or select(1, IsInInstance()) end
+local function IsRested() return (furphyBuffCache.playerInfo and furphyBuffCache.playerInfo.restedXPArea) or IsResting() end
+local function InInstance() return (furphyBuffCache.playerInfo and furphyBuffCache.playerInfo.inInstance) or select(1, IsInInstance()) end
 local function IsGrouped() return IsInGroup() or IsInRaid() end
 
 -- Retrieves exclusion sets from the database.
@@ -97,13 +97,13 @@ end
 
 -- Ensures the display category for Healthstones exists.
 local function ensureCat()
-  clickableRaidBuffCache.displayable[CAT]=clickableRaidBuffCache.displayable[CAT] or {}
-  return clickableRaidBuffCache.displayable[CAT]
+  furphyBuffCache.displayable[CAT]=furphyBuffCache.displayable[CAT] or {}
+  return furphyBuffCache.displayable[CAT]
 end
 
 -- Clears the Healthstone display category.
 local function clearCat()
-  if clickableRaidBuffCache.displayable[CAT] then wipe(clickableRaidBuffCache.displayable[CAT]) end
+  if furphyBuffCache.displayable[CAT] then wipe(furphyBuffCache.displayable[CAT]) end
 end
 
 ns.HealthstoneSoulwellVisible = true
@@ -291,8 +291,8 @@ end
 local function AfterRenderFixups()
   if not ns.RenderFrames then return end
   for _, btn in ipairs(ns.RenderFrames) do
-    if btn:IsShown() and btn._crb_entry and btn._crb_entry.category == CAT then
-      local e = btn._crb_entry
+    if btn:IsShown() and btn._fbb_entry and btn._fbb_entry.category == CAT then
+      local e = btn._fbb_entry
       if e.specAtlas == "common-icon-redx" and btn.rankOverlay then
         btn.rankOverlay:SetAtlas("common-icon-redx", true)
         local w,h = btn:GetWidth(), btn:GetHeight()
@@ -328,7 +328,7 @@ C_Timer.After(0.5, EnsureRenderHook)
 
 -- Ensures Soulwell is listed in exclusions for Warlocks.
 local function EnsureSoulwellListedInExclusions()
-  local root = _G.ClickableRaidData or {}
+  local root = _G.FurphyBuffData or {}
   root.ALL_RAID_BUFFS_BY_CLASS = root.ALL_RAID_BUFFS_BY_CLASS or {}
   root.ALL_RAID_BUFFS_BY_CLASS.WARLOCK = root.ALL_RAID_BUFFS_BY_CLASS.WARLOCK or {}
   local wl = root.ALL_RAID_BUFFS_BY_CLASS.WARLOCK

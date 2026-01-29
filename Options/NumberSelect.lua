@@ -10,7 +10,7 @@ local O = ns.Options or {}
 local LABEL_GAP_Y   = -15
 local BOTTOM_PAD_Y  = 8
 
-local POP_KEY = "CRB_NUMBERSELECT_RESET"
+local POP_KEY = "FBB_NUMBERSELECT_RESET"
 if not StaticPopupDialogs[POP_KEY] then
   StaticPopupDialogs[POP_KEY] = {
     text = "%s",

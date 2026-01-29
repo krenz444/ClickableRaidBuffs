@@ -140,6 +140,7 @@ end
 function ns.GetRaidBuffExpireMine(spellIDs, nameMode, infinite)
     if InCombatLockdown() then return nil end
     local playerGUID = UnitGUID("player")
+    if issecretvalue and issecretvalue(playerGUID) then return nil end
 
     local units = {}
     if IsInRaid() then
@@ -164,7 +165,12 @@ function ns.GetRaidBuffExpireMine(spellIDs, nameMode, infinite)
         if isSecret then return false end
 
         if not aura or not aura.sourceUnit then return false end
-        if UnitGUID(aura.sourceUnit) ~= playerGUID then return false end
+
+        local sourceGUID = UnitGUID(aura.sourceUnit)
+        if issecretvalue and issecretvalue(sourceGUID) then return false end
+
+        if sourceGUID ~= playerGUID then return false end
+
         if nameLookup then
             return aura.name and nameLookup[aura.name] and not NAME_MODE_EXCLUDE[aura.spellId]
         else

@@ -5,9 +5,9 @@
 
 local addonName, ns = ...
 
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.playerInfo  = clickableRaidBuffCache.playerInfo  or {}
-clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.playerInfo  = furphyBuffCache.playerInfo  or {}
+furphyBuffCache.displayable = furphyBuffCache.displayable or {}
 
 -- Retrieves the player's class ID.
 -- Returns nil during combat.
@@ -16,7 +16,7 @@ local function getPlayerClass()
   local _, _, classID = UnitClass("player")
 
   if issecretvalue and issecretvalue(classID) then
-    return clickableRaidBuffCache.playerInfo.playerClassId
+    return furphyBuffCache.playerInfo.playerClassId
   end
 
   return classID
@@ -51,8 +51,8 @@ end
 function ns.Trinkets_RebuildWatch()
   ns._trinketWatch = { spellId = {}, name = {} }
 
-  local classID    = clickableRaidBuffCache.playerInfo.playerClassId or getPlayerClass()
-  local classBuffs = classID and ClickableRaidData and ClickableRaidData[classID]
+  local classID    = furphyBuffCache.playerInfo.playerClassId or getPlayerClass()
+  local classBuffs = classID and FurphyBuffData and FurphyBuffData[classID]
   if not classBuffs then return end
 
   local function addTable(tbl)
@@ -147,11 +147,11 @@ end
 function ns.Trinkets_Scan()
   if InCombatLockdown() then return end
 
-  clickableRaidBuffCache.displayable.TRINKETS = {}
+  furphyBuffCache.displayable.TRINKETS = {}
 
-  local playerLevel = clickableRaidBuffCache.playerInfo.playerLevel or UnitLevel("player") or 0
-  local inInstance  = clickableRaidBuffCache.playerInfo.inInstance
-  local rested      = clickableRaidBuffCache.playerInfo.restedXPArea
+  local playerLevel = furphyBuffCache.playerInfo.playerLevel or UnitLevel("player") or 0
+  local inInstance  = furphyBuffCache.playerInfo.inInstance
+  local rested      = furphyBuffCache.playerInfo.restedXPArea
   local db          = ns.GetDB and ns.GetDB() or {}
 
   local threshold   = (ns.MPlus_GetEffectiveThresholdSecs and ns.MPlus_GetEffectiveThresholdSecs("spell", db.spellThreshold or 15)) or ((db.spellThreshold or 15) * 60)
@@ -459,10 +459,10 @@ local function addEntry(rowKey, data, catName)
   local tgt = (data.target == "player") and "player" or "target"
   entry.macro = "/use [@"..tgt.."] item:"..tostring(itemID)
 
-  clickableRaidBuffCache.displayable[catName][rowKey] = entry
+  furphyBuffCache.displayable[catName][rowKey] = entry
 end
 
-  local trinkets = ClickableRaidData and ClickableRaidData.TRINKETS
+  local trinkets = FurphyBuffData and FurphyBuffData.TRINKETS
   if not trinkets then return end
 
   for rowKey, data in pairs(trinkets) do
@@ -476,7 +476,7 @@ end
   end
 
   do
-    local disp = clickableRaidBuffCache.displayable.TRINKETS or {}
+    local disp = furphyBuffCache.displayable.TRINKETS or {}
     local byKey = {}
     local function hasInstanceGate(e)
       local g = e and e.gates
@@ -531,9 +531,9 @@ end
 
 -- Hooks scanRaidBuffs to include trinket scanning.
 if type(scanRaidBuffs) == "function" and not ns._mergedScan then
-  local _crb_orig_scanRaidBuffs = scanRaidBuffs
+  local _fbb_orig_scanRaidBuffs = scanRaidBuffs
   scanRaidBuffs = function(...)
-    _crb_orig_scanRaidBuffs(...)
+    _fbb_orig_scanRaidBuffs(...)
     if type(ns.Trinkets_Scan) == "function" then ns.Trinkets_Scan() end
   end
   ns._mergedScan = true

@@ -13,10 +13,10 @@
 --   - gates: Array of gate checks (see Gates/ folder)
 --   - infinite: true for auras without duration
 
-ClickableRaidData  = ClickableRaidData  or {}
+FurphyBuffData  = FurphyBuffData  or {}
 ClickableRaidOrder = ClickableRaidOrder or {}
 
-local playerClassID = (clickableRaidBuffCache and clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.playerClassId)
+local playerClassID = (furphyBuffCache and furphyBuffCache.playerInfo and furphyBuffCache.playerInfo.playerClassId)
                      or (type(getPlayerClass)=="function" and getPlayerClass())
                      or 0
 
@@ -147,9 +147,9 @@ local RAID_TRINKETS = {
   },
 }
 
-ClickableRaidData.RAID_TRINKETS = ClickableRaidData.RAID_TRINKETS or {}
+FurphyBuffData.RAID_TRINKETS = FurphyBuffData.RAID_TRINKETS or {}
 for id, e in pairs(RAID_TRINKETS) do
-  ClickableRaidData.RAID_TRINKETS[id] = e
+  FurphyBuffData.RAID_TRINKETS[id] = e
 end
 
 local byClass = {
@@ -170,26 +170,26 @@ local orderByClass = {
 }
 
 if byClass[playerClassID] then
-  ClickableRaidData[playerClassID] = ClickableRaidData[playerClassID] or {}
+  FurphyBuffData[playerClassID] = FurphyBuffData[playerClassID] or {}
   for id, e in pairs(byClass[playerClassID]) do
-    ClickableRaidData[playerClassID][id] = e
+    FurphyBuffData[playerClassID][id] = e
   end
   ClickableRaidOrder[playerClassID] = orderByClass[playerClassID]
 end
 
-if ClickableRaidData[playerClassID] then
+if FurphyBuffData[playerClassID] then
   for id, e in pairs(RAID_TRINKETS) do
-    ClickableRaidData[playerClassID][id] = e
+    FurphyBuffData[playerClassID][id] = e
     if ClickableRaidOrder[playerClassID] then
       table.insert(ClickableRaidOrder[playerClassID], id)
     end
   end
 end
 
-ClickableRaidData.ALL_RAID_BUFFS = ClickableRaidData.ALL_RAID_BUFFS or {}
+FurphyBuffData.ALL_RAID_BUFFS = FurphyBuffData.ALL_RAID_BUFFS or {}
 do
   local function merge(src)
-    for id, e in pairs(src) do ClickableRaidData.ALL_RAID_BUFFS[id] = e end
+    for id, e in pairs(src) do FurphyBuffData.ALL_RAID_BUFFS[id] = e end
   end
   merge(RAID_WARRIOR); merge(RAID_PALADIN); merge(RAID_HUNTER);  merge(RAID_ROGUE);
   merge(RAID_PRIEST);  merge(RAID_DK);      merge(RAID_SHAMAN);  merge(RAID_MAGE);
@@ -197,9 +197,9 @@ do
   merge(RAID_EVOKER);
 end
 
-ClickableRaidData.ALL_RAID_BUFFS_BY_CLASS = ClickableRaidData.ALL_RAID_BUFFS_BY_CLASS or {}
+FurphyBuffData.ALL_RAID_BUFFS_BY_CLASS = FurphyBuffData.ALL_RAID_BUFFS_BY_CLASS or {}
 do
-  local byClass = ClickableRaidData.ALL_RAID_BUFFS_BY_CLASS
+  local byClass = FurphyBuffData.ALL_RAID_BUFFS_BY_CLASS
   for k in pairs(byClass) do byClass[k] = nil end
 
   local CLASS_SETS = {
@@ -227,12 +227,12 @@ do
   end
 end
 
-ClickableRaidData.ALL_TRINKETS = ClickableRaidData.ALL_TRINKETS or {}
+FurphyBuffData.ALL_TRINKETS = FurphyBuffData.ALL_TRINKETS or {}
 for id, e in pairs(RAID_TRINKETS) do
-  ClickableRaidData.ALL_TRINKETS[id] = e
+  FurphyBuffData.ALL_TRINKETS[id] = e
 end
 
-ClickableRaidData.ALL_RAID_BUFFS_BY_CLASS = {
+FurphyBuffData.ALL_RAID_BUFFS_BY_CLASS = {
   WARRIOR      = RAID_WARRIOR,
   PALADIN      = RAID_PALADIN,
   HUNTER       = RAID_HUNTER,
@@ -247,11 +247,11 @@ ClickableRaidData.ALL_RAID_BUFFS_BY_CLASS = {
   DEMONHUNTER  = RAID_DH,
   EVOKER       = RAID_EVOKER,
 }
-ClickableRaidData.RAID_BUFF_CLASS_ORDER = {
+FurphyBuffData.RAID_BUFF_CLASS_ORDER = {
   "WARRIOR","PALADIN","HUNTER","ROGUE","PRIEST","DEATHKNIGHT",
   "SHAMAN","MAGE","WARLOCK","MONK","DRUID","DEMONHUNTER","EVOKER",
 }
-ClickableRaidData.RAID_BUFF_CLASS_LABELS = {
+FurphyBuffData.RAID_BUFF_CLASS_LABELS = {
   WARRIOR="Warrior", PALADIN="Paladin", HUNTER="Hunter", ROGUE="Rogue", PRIEST="Priest",
   DEATHKNIGHT="Death Knight", SHAMAN="Shaman", MAGE="Mage", WARLOCK="Warlock",
   MONK="Monk", DRUID="Druid", DEMONHUNTER="Demon Hunter", EVOKER="Evoker",

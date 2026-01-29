@@ -1,9 +1,9 @@
-# Clickable Raid Buffs
+# Furphy Buff Buttons
 
-**Clickable Raid Buffs (CRB)** is a World of Warcraft addon that displays missing raid buffs, consumables, and temporary enchants, allowing you to click them to cast the buff or use the item directly.
+**Furphy Buff Buttons (FBB)** is a World of Warcraft addon that displays missing raid buffs, consumables, and temporary enchants, allowing you to click them to cast the buff or use the item directly.
 
-**Author:** Furphy (Originally created by Funki)  
-**Version:** 7.0.0
+**Author:** Furphy (Originally created by Funki)
+**Version:** 7.1.0
 
 ## Features
 
@@ -34,11 +34,11 @@ The addon works out of the box with sensible defaults.
 
 ### Slash Commands
 
-*   `/crb` or `/buff` - Open the options menu.
-*   `/crb unlock` - Unlock the frame to move it.
-*   `/crb lock` - Lock the frame.
-*   `/crb minimap` - Toggle the minimap button.
-*   `/crb reset` - Reset all settings to default.
+*   `/fbb` or `/buff` - Open the options menu.
+*   `/fbb unlock` - Unlock the frame to move it.
+*   `/fbb lock` - Lock the frame.
+*   `/fbb minimap` - Toggle the minimap button.
+*   `/fbb reset` - Reset all settings to default.
 
 ## Recent Changes (v7.0.0)
 

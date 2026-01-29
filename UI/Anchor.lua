@@ -4,10 +4,10 @@
 -- This file handles the positioning and saving of the main addon frame anchor.
 
 local addonName, ns = ...
-clickableRaidBuffCache = clickableRaidBuffCache or {}
+furphyBuffCache = furphyBuffCache or {}
 
 local function InCombat() return InCombatLockdown() end
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 
 -- Retrieves the main parent frame.
 local function EnsureParent()
@@ -28,7 +28,7 @@ end
 -- Skipped during combat.
 local function ApplySavedAnchor()
   if InCombat() then
-    clickableRaidBuffCache._anchor_pending = true
+    furphyBuffCache._anchor_pending = true
     return
   end
   local parent = EnsureParent()
@@ -44,8 +44,8 @@ local function ApplySavedAnchor()
   parent:ClearAllPoints()
   parent:SetPoint(point or "CENTER", _G[relative or "UIParent"] or UIParent, relativePoint or "CENTER", x or 0, y or 0)
 
-  parent._crb_anchor_applied = true
-  clickableRaidBuffCache._anchor_pending = nil
+  parent._fbb_anchor_applied = true
+  furphyBuffCache._anchor_pending = nil
 end
 
 -- Saves the current anchor position to the database.
@@ -65,11 +65,11 @@ end
 -- Hooks drag events to save the anchor position.
 local function HookDragSavers()
   local parent = EnsureParent()
-  if not parent or parent._crb_anchor_hooks then return end
+  if not parent or parent._fbb_anchor_hooks then return end
 
   parent:HookScript("OnDragStop", SaveAnchor)
   parent:HookScript("OnMouseUp",  SaveAnchor)
-  parent._crb_anchor_hooks = true
+  parent._fbb_anchor_hooks = true
 end
 
 -- Attempts to setup the anchor.
@@ -98,7 +98,7 @@ f:SetScript("OnEvent", function(self, event)
       C_Timer.After(1.00, TrySetup)
     end
   elseif event == "PLAYER_REGEN_ENABLED" then
-    if clickableRaidBuffCache._anchor_pending then
+    if furphyBuffCache._anchor_pending then
       ApplySavedAnchor()
     end
   elseif event == "PLAYER_LOGOUT" then

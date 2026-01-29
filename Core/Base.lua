@@ -8,13 +8,13 @@ ns = ns or {}
 _G[addonName] = ns -- Expose namespace globally
 
 -- Initialize global database tables if they don't exist
-ClickableRaidBuffsDB   = ClickableRaidBuffsDB   or {}
-ClickableRaidData      = ClickableRaidData      or {}
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.displayable                 = clickableRaidBuffCache.displayable                 or {}
-clickableRaidBuffCache.playerInfo                  = clickableRaidBuffCache.playerInfo                  or {}
-clickableRaidBuffCache.functions                   = clickableRaidBuffCache.functions                   or {}
-clickableRaidBuffCache.functions.bagsPendingScan   = clickableRaidBuffCache.functions.bagsPendingScan   or {}
+FurphyBuffButtonsDB   = FurphyBuffButtonsDB   or {}
+FurphyBuffData      = FurphyBuffData      or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.displayable                 = furphyBuffCache.displayable                 or {}
+furphyBuffCache.playerInfo                  = furphyBuffCache.playerInfo                  or {}
+furphyBuffCache.functions                   = furphyBuffCache.functions                   or {}
+furphyBuffCache.functions.bagsPendingScan   = furphyBuffCache.functions.bagsPendingScan   or {}
 
 -- Constants
 ns.CORNER_TEXT_FIELD = "qty"
@@ -22,7 +22,7 @@ ns.BASE_ICON_SIZE    = ns.BASE_ICON_SIZE or 50
 
 -- Returns the main database table
 function ns.GetDB()
-  return ClickableRaidBuffsDB
+  return FurphyBuffButtonsDB
 end
 
 -- Creates a shallow copy of an item data table
@@ -105,10 +105,10 @@ loader:RegisterEvent("ADDON_LOADED")
 loader:SetScript("OnEvent", function(_, _, name)
   if name ~= addonName then return end
 
-  if type(ClickableRaidBuffsDB) ~= "table" then
-    ClickableRaidBuffsDB = {}
+  if type(FurphyBuffButtonsDB) ~= "table" then
+    FurphyBuffButtonsDB = {}
   end
-  local db = ClickableRaidBuffsDB
+  local db = FurphyBuffButtonsDB
 
   local O = ns.Options or {}
   local D = O.DEFAULTS or {}

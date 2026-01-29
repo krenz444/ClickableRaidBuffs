@@ -6,7 +6,7 @@
 local addonName, ns = ...
 local GlowLib = LibStub and LibStub("LibCustomGlow-1.0", true)
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 local FALLBACK_SPECIAL = { r = 0.00, g = 0.9137, b = 1.00, a = 1 }
 local FALLBACK_GENERAL = { r = 0.95, g = 0.95,  b = 0.32, a = 1 }
 
@@ -34,11 +34,11 @@ local function ensureGlow(btn, shouldEnable, color, size)
   if not GlowLib or not btn then return end
 
   if not shouldEnable then
-    if btn._crb_glow_enabled then
+    if btn._fbb_glow_enabled then
       GlowLib.PixelGlow_Stop(btn)
-      btn._crb_glow_enabled = false
-      btn._crb_glow_rgba = nil
-      btn._crb_glow_size = nil
+      btn._fbb_glow_enabled = false
+      btn._fbb_glow_rgba = nil
+      btn._fbb_glow_size = nil
     end
     return
   end
@@ -50,17 +50,17 @@ local function ensureGlow(btn, shouldEnable, color, size)
   local length = (10 / 50) * size
   local th     = ( 1 / 50) * size
 
-  if btn._crb_glow_enabled then
-    if not sameRGBA(btn._crb_glow_rgba, rgba) or btn._crb_glow_size ~= size then
+  if btn._fbb_glow_enabled then
+    if not sameRGBA(btn._fbb_glow_rgba, rgba) or btn._fbb_glow_size ~= size then
       GlowLib.PixelGlow_Stop(btn)
-      btn._crb_glow_enabled = false
+      btn._fbb_glow_enabled = false
     end
   end
-  if not btn._crb_glow_enabled then
+  if not btn._fbb_glow_enabled then
     GlowLib.PixelGlow_Start(btn, rgba, N, frequency, length, 1, th)
-    btn._crb_glow_enabled = true
-    btn._crb_glow_rgba = rgba
-    btn._crb_glow_size = size
+    btn._fbb_glow_enabled = true
+    btn._fbb_glow_rgba = rgba
+    btn._fbb_glow_size = size
   end
 end
 
@@ -85,7 +85,7 @@ function ns.RefreshGlow()
   for i = 1, #frames do
     local btn = frames[i]
     if btn and btn:IsShown() then
-      local entry = btn._crb_entry
+      local entry = btn._fbb_entry
       local color = pickColorForEntry(d, entry, general, special)
       ensureGlow(btn, enabled, color, size)
     end

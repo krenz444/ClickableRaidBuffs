@@ -5,10 +5,10 @@
 
 local addonName, ns = ...
 
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.displayable = furphyBuffCache.displayable or {}
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {} end
 DB().fixedTargets = DB().fixedTargets or {}
 
 local CAT          = "SHAMAN_SHIELDS"
@@ -20,8 +20,8 @@ local function InCombat() return InCombatLockdown() end
 -- Checks if the player is a Shaman.
 -- Returns cached value during combat.
 local function isShaman()
-  if InCombat() then return clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.playerClassId == 7 end
-  local cid = (clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.playerClassId)
+  if InCombat() then return furphyBuffCache.playerInfo and furphyBuffCache.playerInfo.playerClassId == 7 end
+  local cid = (furphyBuffCache.playerInfo and furphyBuffCache.playerInfo.playerClassId)
               or (type(getPlayerClass)=="function" and getPlayerClass())
   return cid == 7
 end
@@ -34,7 +34,7 @@ end
 
 -- Calculates the threshold for showing the shield icon based on spell duration settings.
 local function thresholdSecs()
-  local db = (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+  local db = (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
   local baseMin = db.spellThreshold or 15
   if ns.MPlus_GetEffectiveThresholdSecs then
     return ns.MPlus_GetEffectiveThresholdSecs("spell", baseMin)
@@ -44,13 +44,13 @@ end
 
 -- Ensures the display category for Shaman shields exists.
 local function ensureCat()
-  clickableRaidBuffCache.displayable[CAT] = clickableRaidBuffCache.displayable[CAT] or {}
-  return clickableRaidBuffCache.displayable[CAT]
+  furphyBuffCache.displayable[CAT] = furphyBuffCache.displayable[CAT] or {}
+  return furphyBuffCache.displayable[CAT]
 end
 
 -- Clears the Shaman shields display category.
 local function clearCat()
-  if clickableRaidBuffCache.displayable[CAT] then wipe(clickableRaidBuffCache.displayable[CAT]) end
+  if furphyBuffCache.displayable[CAT] then wipe(furphyBuffCache.displayable[CAT]) end
 end
 
 -- Gets a short name from a unit ID.
@@ -241,7 +241,7 @@ local function Build()
   if not isShaman() then clearCat(); return end
   if InRestedArea() then clearCat(); return end
 
-  local tbl = ClickableRaidData and ClickableRaidData[CAT]
+  local tbl = FurphyBuffData and FurphyBuffData[CAT]
   if not tbl then clearCat(); return end
 
   local out = ensureCat()
@@ -387,7 +387,7 @@ end
 
 function ns.ShamanShields_OnUnitAura(unit)
   if InCombat() then return false end
-  local tbl = ClickableRaidData and ClickableRaidData[CAT]
+  local tbl = FurphyBuffData and FurphyBuffData[CAT]
   local ES  = tbl and tbl[974]
   if not ES then return false end
   if unit and (unit == "player" or unit:match("^party%d") or unit:match("^raid%d")) then

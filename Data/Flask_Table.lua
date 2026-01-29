@@ -2,7 +2,7 @@
 -- \Data\Flask_Table.lua
 -- ====================================
 
-ClickableRaidData["FLASK"] = {
+FurphyBuffData["FLASK"] = {
   [212747] = {name="Fleeting Flask of Saving Graces",icon=609901,minLevel=71,topLbl="Heal", btmLbl="", glow="special",fleeting=true,  rank=3, buffID={432473}, gates={ "instance", "rested" }},
   [212746] = {name="Fleeting Flask of Saving Graces",icon=609901,minLevel=71,topLbl="Heal", btmLbl="", glow="special",fleeting=true,  rank=2, buffID={432473}, gates={ "instance", "rested" }},
   [212745] = {name="Fleeting Flask of Saving Graces",icon=609901,minLevel=71,topLbl="Heal", btmLbl="", glow="special",fleeting=true,  rank=1, buffID={432473}, gates={ "instance", "rested" }},

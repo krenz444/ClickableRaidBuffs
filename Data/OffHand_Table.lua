@@ -2,7 +2,7 @@
 -- \Data\OffHand_Table.lua
 -- ====================================
 
-ClickableRaidData["OFF_HAND"] = {
+FurphyBuffData["OFF_HAND"] = {
   [222504] = { name="Ironclaw Whetstone", weaponType="BLADED", dual=true, rank=3, icon=3622195, topLbl="+AP", btmLbl=nil, gates={ "instance", "rested" } },
   [222503] = { name="Ironclaw Whetstone", weaponType="BLADED", dual=true, rank=2, icon=3622195, topLbl="+AP", btmLbl=nil, gates={ "instance", "rested" } },
   [222502] = { name="Ironclaw Whetstone", weaponType="BLADED", dual=true, rank=1, icon=3622195, topLbl="+AP", btmLbl=nil, gates={ "instance", "rested" } },

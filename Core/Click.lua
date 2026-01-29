@@ -43,7 +43,7 @@ local function ForceSelfCastOnButtons()
   if InCombatLockdown() then return end
   for _, b in ipairs(ns.RenderFrames) do
     if b and b:IsShown() then
-      local e = b._crb_entry
+      local e = b._fbb_entry
       local atype = (b.GetAttribute and b:GetAttribute("type")) or nil
       if EntryWantsSelfCast(e) then
         if atype == "spell" or atype == "item" then

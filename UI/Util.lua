@@ -23,8 +23,8 @@ end
 
 -- Sets the icon texture only if it has changed, to avoid unnecessary updates.
 function ns.SetIconTextureIfChanged(btn, tex)
-    if btn.icon._crb_tex ~= tex then
+    if btn.icon._fbb_tex ~= tex then
         btn.icon:SetTexture(tex or 134400)
-        btn.icon._crb_tex = tex
+        btn.icon._fbb_tex = tex
     end
 end

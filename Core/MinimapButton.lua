@@ -5,7 +5,7 @@
 
 local addonName, ns = ...
 
-local ClickableRaidBuffs = LibStub("AceAddon-3.0"):NewAddon("ClickableRaidBuffs", "AceConsole-3.0")
+local FurphyBuffButtons = LibStub("AceAddon-3.0"):NewAddon("FurphyBuffButtons", "AceConsole-3.0")
 
 -- Libs
 local LDB = LibStub("LibDataBroker-1.1")
@@ -13,14 +13,14 @@ local LDI = LibStub("LibDBIcon-1.0", true)
 local AceDB = LibStub("AceDB-3.0")
 
 -- Create the data object for the minimap button
-local miniButton = LDB:NewDataObject("ClickableRaidBuffs", {
+local miniButton = LDB:NewDataObject("FurphyBuffButtons", {
     type = "data source",
-    text = "CRB",
-    icon = "Interface\\AddOns\\ClickableRaidBuffs\\Media\\furphyMinimapIcon",
+    text = "FBB",
+    icon = "Interface\\AddOns\\FurphyBuffButtons\\Media\\furphyMinimapIcon",
 
     OnClick = function(_, btn)
         if InCombatLockdown() then
-            print("|cFF00ccffCRB:|r Minimap menu is disabled during combat.")
+            print("|cFF00ccffFBB:|r Minimap menu is disabled during combat.")
             return
         end
 
@@ -29,8 +29,8 @@ local miniButton = LDB:NewDataObject("ClickableRaidBuffs", {
                 ns.OptionsFrame:Hide()
             elseif ns and ns.OpenOptions then
                 ns.OpenOptions()
-            elseif SlashCmdList and SlashCmdList["CLICKABLERAIDBUFFS"] then
-                SlashCmdList["CLICKABLERAIDBUFFS"]("")
+            elseif SlashCmdList and SlashCmdList["FURPHYBUFFBUTTONS"] then
+                SlashCmdList["FURPHYBUFFBUTTONS"]("")
             end
 
         elseif btn == "RightButton" then
@@ -44,7 +44,7 @@ local miniButton = LDB:NewDataObject("ClickableRaidBuffs", {
 
     OnTooltipShow = function(tooltip)
         if not tooltip or not tooltip.AddLine then return end
-        tooltip:AddLine("|cff00ccffClickable Raid Buffs|r")
+        tooltip:AddLine("|cff00ccffFurphy Buff Buttons|r")
         tooltip:AddLine(" ")
         tooltip:AddLine("Left-click: Open Settings")
         tooltip:AddLine("Right-click: Toggle Icon Frame Lock")
@@ -52,17 +52,17 @@ local miniButton = LDB:NewDataObject("ClickableRaidBuffs", {
 })
 
 -- Refreshes the minimap icon state (show/hide) based on settings
-function ClickableRaidBuffs:RefreshMinimapIcon()
+function FurphyBuffButtons:RefreshMinimapIcon()
     if not (LDI and self.minimapDB and self.minimapDB.profile) then return end
     local prof = self.minimapDB.profile
     prof.minimap = prof.minimap or { hide = false, minimapPos = 180 }
 
-    LDI:Register("ClickableRaidBuffs", miniButton, prof.minimap)
+    LDI:Register("FurphyBuffButtons", miniButton, prof.minimap)
 
     if prof.minimap.hide then
-        LDI:Hide("ClickableRaidBuffs")
+        LDI:Hide("FurphyBuffButtons")
     else
-        LDI:Show("ClickableRaidBuffs")
+        LDI:Show("FurphyBuffButtons")
     end
 
     if ns and ns.InfoTab_UpdateMinimapCheckbox then
@@ -71,8 +71,8 @@ function ClickableRaidBuffs:RefreshMinimapIcon()
 end
 
 -- Initializes the minimap button and database
-function ClickableRaidBuffs:OnInitialize()
-    self.minimapDB = AceDB:New("ClickableRaidBuffsMinimapDB", {
+function FurphyBuffButtons:OnInitialize()
+    self.minimapDB = AceDB:New("FurphyBuffButtonsMinimapDB", {
         profile = {
             minimap = {
                 hide = false,
@@ -86,7 +86,7 @@ function ClickableRaidBuffs:OnInitialize()
     end
 
     local legacy = nil
-    local sv = _G.ClickableRaidBuffsDB
+    local sv = _G.FurphyBuffButtonsDB
     if type(sv) == "table" and type(sv.profile) == "table" and type(sv.profile.minimap) == "table" then
         legacy = sv.profile.minimap
     end
@@ -104,12 +104,12 @@ function ClickableRaidBuffs:OnInitialize()
     self.minimapDB.RegisterCallback(self, "OnProfileReset",   "OnMinimapProfileChanged")
 end
 
-function ClickableRaidBuffs:OnMinimapProfileChanged()
+function FurphyBuffButtons:OnMinimapProfileChanged()
     self:RefreshMinimapIcon()
 end
 
 -- Toggles the visibility of the minimap button
-function ClickableRaidBuffs:ToggleMinimapButton(state)
+function FurphyBuffButtons:ToggleMinimapButton(state)
     if not (LDI and self.minimapDB and self.minimapDB.profile) then return end
 
     local prof = self.minimapDB.profile
@@ -121,9 +121,9 @@ function ClickableRaidBuffs:ToggleMinimapButton(state)
     prof.minimap.hide = state and true or false
 
     if prof.minimap.hide then
-        LDI:Hide("ClickableRaidBuffs")
+        LDI:Hide("FurphyBuffButtons")
     else
-        LDI:Show("ClickableRaidBuffs")
+        LDI:Show("FurphyBuffButtons")
     end
 
     if ns and ns.InfoTab_UpdateMinimapCheckbox then
@@ -133,18 +133,18 @@ end
 
 -- Public API to toggle the minimap button
 function ns.ToggleMinimapButton(state)
-    if ClickableRaidBuffs and ClickableRaidBuffs.ToggleMinimapButton then
-        ClickableRaidBuffs:ToggleMinimapButton(state)
+    if FurphyBuffButtons and FurphyBuffButtons.ToggleMinimapButton then
+        FurphyBuffButtons:ToggleMinimapButton(state)
     end
 end
 function ns.Minimap_Show()
-    if ClickableRaidBuffs then ClickableRaidBuffs:ToggleMinimapButton(false) end
+    if FurphyBuffButtons then FurphyBuffButtons:ToggleMinimapButton(false) end
 end
 function ns.Minimap_Hide()
-    if ClickableRaidBuffs then ClickableRaidBuffs:ToggleMinimapButton(true) end
+    if FurphyBuffButtons then FurphyBuffButtons:ToggleMinimapButton(true) end
 end
 function ns.Minimap_Toggle()
-    if not (ClickableRaidBuffs and ClickableRaidBuffs.minimapDB and ClickableRaidBuffs.minimapDB.profile) then return end
-    local hide = (ClickableRaidBuffs.minimapDB.profile.minimap and ClickableRaidBuffs.minimapDB.profile.minimap.hide) and true or false
-    ClickableRaidBuffs:ToggleMinimapButton(not hide)
+    if not (FurphyBuffButtons and FurphyBuffButtons.minimapDB and FurphyBuffButtons.minimapDB.profile) then return end
+    local hide = (FurphyBuffButtons.minimapDB.profile.minimap and FurphyBuffButtons.minimapDB.profile.minimap.hide) and true or false
+    FurphyBuffButtons:ToggleMinimapButton(not hide)
 end

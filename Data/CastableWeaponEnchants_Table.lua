@@ -2,12 +2,12 @@
 -- \Data\CastableWeaponEnchants_Table.lua
 -- ====================================
 
-ClickableRaidData = ClickableRaidData or {}
+FurphyBuffData = FurphyBuffData or {}
 
 local CAT = "CASTABLE_WEAPON_ENCHANTS"
-ClickableRaidData[CAT] = ClickableRaidData[CAT] or {}
+FurphyBuffData[CAT] = FurphyBuffData[CAT] or {}
 
-local t = ClickableRaidData[CAT]
+local t = FurphyBuffData[CAT]
 
 t[318038] = {
   name      = "Flametongue Weapon",

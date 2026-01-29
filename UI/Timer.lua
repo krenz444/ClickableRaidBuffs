@@ -30,16 +30,16 @@ local function updateBottomTimer(btn, entry, tNow)
     local hasBottom = bt and bt:IsShown() and (bt:GetText() or "") ~= ""
 
     if hasBottom then
-      if tt._crb_anchor_mode ~= "under_bottom" then
+      if tt._fbb_anchor_mode ~= "under_bottom" then
         tt:ClearAllPoints()
         tt:SetPoint("TOP", bt, "BOTTOM", 0, -2) -- small gap when both are present
-        tt._crb_anchor_mode = "under_bottom"
+        tt._fbb_anchor_mode = "under_bottom"
       end
     else
-      if tt._crb_anchor_mode ~= "under_button" then
+      if tt._fbb_anchor_mode ~= "under_button" then
         tt:ClearAllPoints()
         tt:SetPoint("TOP", btn, "BOTTOM", 0, -5) -- aligned with label position when no bottom label
-        tt._crb_anchor_mode = "under_button"
+        tt._fbb_anchor_mode = "under_button"
       end
     end
   end
@@ -99,11 +99,11 @@ local function anyActive(tNow)
   for i=1,#frames do
     local btn = frames[i]
     if btn and btn:IsShown() then
-      if btn._crb_cd_start and btn._crb_cd_dur then
-        local endsAt = btn._crb_cd_start + btn._crb_cd_dur
+      if btn._fbb_cd_start and btn._fbb_cd_dur then
+        local endsAt = btn._fbb_cd_start + btn._fbb_cd_dur
         if endsAt - tNow > 0 then return true end
       end
-      local e = btn._crb_entry
+      local e = btn._fbb_entry
       if e and e.category ~= "EATING" and e.expireTime and e.expireTime ~= math.huge then
         local rem = e.expireTime - tNow
         if e.category == "AUGMENT_RUNE" then
@@ -114,7 +114,7 @@ local function anyActive(tNow)
       end
     end
   end
-  local disp = _G.clickableRaidBuffCache and _G.clickableRaidBuffCache.displayable
+  local disp = _G.furphyBuffCache and _G.furphyBuffCache.displayable
   local aug  = disp and disp.AUGMENT_RUNE
   if type(aug) == "table" then
     for _, e in pairs(aug) do
@@ -135,7 +135,7 @@ local function tick()
 
   local t2 = now()
 
-  local disp = _G.clickableRaidBuffCache and _G.clickableRaidBuffCache.displayable
+  local disp = _G.furphyBuffCache and _G.furphyBuffCache.displayable
   local aug  = disp and disp.AUGMENT_RUNE
   if type(aug) == "table" then
     local due
@@ -155,10 +155,10 @@ local function tick()
     for i=1,#frames do
       local btn = frames[i]
       if btn and btn:IsShown() then
-        if ns.CooldownTick and btn._crb_cd_start and btn._crb_cd_dur then
+        if ns.CooldownTick and btn._fbb_cd_start and btn._fbb_cd_dur then
           ns.CooldownTick(btn)
         end
-        local e = btn._crb_entry
+        local e = btn._fbb_entry
         if e then
           updateBottomTimer(btn, e, t2)
           if e.category ~= "EATING" and e.expireTime and e.expireTime ~= math.huge then
@@ -203,13 +203,13 @@ end
 
 -- Hooks Cooldown_RefreshAll to recompute timer schedule.
 do
-  if type(ns.Cooldown_RefreshAll) == "function" and not ns._crb_cd_refresh_wrapped then
+  if type(ns.Cooldown_RefreshAll) == "function" and not ns._fbb_cd_refresh_wrapped then
     local _orig = ns.Cooldown_RefreshAll
     ns.Cooldown_RefreshAll = function(...)
       local r = _orig(...)
       if ns.Timer_RecomputeSchedule then ns.Timer_RecomputeSchedule() end
       return r
     end
-    ns._crb_cd_refresh_wrapped = true
+    ns._fbb_cd_refresh_wrapped = true
   end
 end

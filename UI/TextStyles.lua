@@ -6,7 +6,7 @@
 local addonName, ns = ...
 
 local function InCombat() return InCombatLockdown() end
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 
 -- Retrieves LibSharedMedia if available.
 local function getLSM()

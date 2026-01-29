@@ -11,7 +11,7 @@ local O = ns.Options
 local EXCLUSIONS_WINDOW_HEIGHT = (O and O.EXCLUSIONS_WINDOW_HEIGHT) or 385
 
 local function DB()
-  return (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+  return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
 end
 
 -- Retrieves the appropriate exclusion set (general or raid buff specific) based on the active key.
@@ -30,7 +30,7 @@ end
 function ns.IsExcluded(id, activeKey)
   if not id then return false end
 
-  local d = (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+  local d = (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
   d.exclusions = d.exclusions or {}
   d.raidBuffExclusions = d.raidBuffExclusions or {}
 
@@ -53,7 +53,7 @@ local function NotifyChanged()
     _pendingOptionsRefresh = false
     if O and _safeCall(O.OnOptionChanged) then return end
     if ns and (_safeCall(ns.RebuildDisplayables) or _safeCall(ns.RefreshEverything) or _safeCall(ns.PushRender) or _safeCall(ns.RenderAll)) then return end
-    if _G and (_safeCall(_G.ClickableRaidBuffs_Rebuild) or _safeCall(_G.ClickableRaidBuffs_ForceRefresh) or _safeCall(_G.ClickableRaidBuffs_PushRender)) then return end
+    if _G and (_safeCall(_G.FurphyBuffButtons_Rebuild) or _safeCall(_G.FurphyBuffButtons_ForceRefresh) or _safeCall(_G.FurphyBuffButtons_PushRender)) then return end
   end)
 end
 
@@ -192,7 +192,7 @@ local SPLIT_SOURCES = {
 }
 
 local function getCategorySource(cat)
-  local d = _G.ClickableRaidData or {}
+  local d = _G.FurphyBuffData or {}
   if type(d[cat]) == "table" then return d[cat] end
   local splitName = SPLIT_SOURCES[cat]
   if splitName and type(_G[splitName]) == "table" then return _G[splitName] end
@@ -284,7 +284,7 @@ end
 
 local function collectClassAbilitiesByClass()
   local outBlocks, requested = {}, false
-  local root = _G.ClickableRaidData or {}
+  local root = _G.FurphyBuffData or {}
   local byClass = root.ALL_RAID_BUFFS_BY_CLASS
 
   local rogPois = getCategorySource("ROGUE_POISONS") or {}
@@ -379,7 +379,7 @@ end
 
 local function collectTrinketRaidBuffs()
   local out = {}
-  local root = _G.ClickableRaidData or {}
+  local root = _G.FurphyBuffData or {}
 
   if type(root.ALL_TRINKETS)=="table" and next(root.ALL_TRINKETS) then
     for id, info in pairs(root.ALL_TRINKETS) do

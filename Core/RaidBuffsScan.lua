@@ -5,9 +5,9 @@
 
 local addonName, ns = ...
 
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.playerInfo  = clickableRaidBuffCache.playerInfo  or {}
-clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.playerInfo  = furphyBuffCache.playerInfo  or {}
+furphyBuffCache.displayable = furphyBuffCache.displayable or {}
 
 -- Retrieves the player's class ID.
 -- Returns nil during combat.
@@ -17,7 +17,7 @@ local function getPlayerClass()
 
   -- Handle potential secret return from UnitClass
   if issecretvalue and issecretvalue(classID) then
-    return clickableRaidBuffCache.playerInfo.playerClassId
+    return furphyBuffCache.playerInfo.playerClassId
   end
 
   return classID
@@ -53,8 +53,8 @@ end
 function ns.RebuildRaidBuffWatch()
   ns._raidBuffWatch = { spellId = {}, name = {} }
 
-  local classID    = clickableRaidBuffCache.playerInfo.playerClassId or getPlayerClass()
-  local classBuffs = classID and ClickableRaidData and ClickableRaidData[classID]
+  local classID    = furphyBuffCache.playerInfo.playerClassId or getPlayerClass()
+  local classBuffs = classID and FurphyBuffData and FurphyBuffData[classID]
   if not classBuffs then return end
 
   local function addTable(tbl)
@@ -149,17 +149,17 @@ end
 function scanRaidBuffs()
   if InCombatLockdown() then return end
 
-  clickableRaidBuffCache.displayable.RAID_BUFFS = {}
+  furphyBuffCache.displayable.RAID_BUFFS = {}
 
-  local classID = clickableRaidBuffCache.playerInfo.playerClassId or getPlayerClass()
+  local classID = furphyBuffCache.playerInfo.playerClassId or getPlayerClass()
   if not classID then return end
 
-  local classBuffs = ClickableRaidData and ClickableRaidData[classID]
+  local classBuffs = FurphyBuffData and FurphyBuffData[classID]
   if not classBuffs then return end
 
-  local playerLevel = clickableRaidBuffCache.playerInfo.playerLevel or UnitLevel("player") or 0
-  local inInstance  = clickableRaidBuffCache.playerInfo.inInstance
-  local rested      = clickableRaidBuffCache.playerInfo.restedXPArea
+  local playerLevel = furphyBuffCache.playerInfo.playerLevel or UnitLevel("player") or 0
+  local inInstance  = furphyBuffCache.playerInfo.inInstance
+  local rested      = furphyBuffCache.playerInfo.restedXPArea
   local db          = ns.GetDB and ns.GetDB() or {}
 
   local threshold   = (ns.MPlus_GetEffectiveThresholdSecs and ns.MPlus_GetEffectiveThresholdSecs("spell", db.spellThreshold or 15)) or ((db.spellThreshold or 15) * 60)
@@ -479,7 +479,7 @@ local function addEntry(rowKey, data, catName)
     entry.centerText = ""
   end
 
-  clickableRaidBuffCache.displayable[catName][rowKey] = entry
+  furphyBuffCache.displayable[catName][rowKey] = entry
 end
 
   for rowKey, data in pairs(classBuffs) do
@@ -502,7 +502,7 @@ end
   end
 
   do
-    local disp = clickableRaidBuffCache.displayable.RAID_BUFFS or {}
+    local disp = furphyBuffCache.displayable.RAID_BUFFS or {}
     local byKey = {}
     local function hasInstanceGate(e)
       local g = e and e.gates

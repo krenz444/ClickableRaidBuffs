@@ -5,7 +5,7 @@
 
 local addonName, ns = ...
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 
 -- Default order of categories
 local DEFAULT_ORDER = {
@@ -60,7 +60,7 @@ end
 
 -- Public API to set the category order
 function ns.SetCategoryOrder(order)
-  local d = (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {}
+  local d = (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {}
   if type(order) ~= "table" then
     if ns.DebugPrint then ns.DebugPrint("SetCategoryOrder ignored: expected table, got "..type(order)) end
     return

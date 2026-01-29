@@ -2,7 +2,7 @@
 -- \Data\Food_Table.lua
 -- ====================================
 
-ClickableRaidData["FOOD"] = {
+FurphyBuffData["FOOD"] = {
   [222781] = {name="Hearty Feast of the Midnight Masquerade",icon=5793729,minLevel=68,topLbl="Feast",btmLbl="",glow="special",hearty=true,gates={ "instance", "rested" }},
   [222780] = {name="Hearty Feast of the Divine Day",icon=5793728,minLevel=68,topLbl="Feast",btmLbl="",glow="special",hearty=true,gates={ "instance", "rested" }},
   [222753] = {name="Hearty Roasted Mycobloom",icon=133943,minLevel=68,topLbl="L Stat",btmLbl="",glow="special",hearty=true,gates={ "instance", "rested" }},
@@ -83,7 +83,7 @@ ClickableRaidData["FOOD"] = {
 }
 
 
-ClickableRaidData["EATING"] = {
+FurphyBuffData["EATING"] = {
   272819,	--"Food & Drink"
   6410, 	--"Food"
   462177, 	--"Food and Drink"
@@ -92,7 +92,7 @@ ClickableRaidData["EATING"] = {
 }
 
 
-ClickableRaidData["WELLFED"] = {
+FurphyBuffData["WELLFED"] = {
   455369, 	--"Well Fed"
   462187, 	--"Hearty Well Fed"
 }

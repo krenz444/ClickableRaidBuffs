@@ -5,13 +5,13 @@
 
 local addonName, ns = ...
 
-local C = _G.clickableRaidBuffCache or {}
-_G.clickableRaidBuffCache = C
+local C = _G.furphyBuffCache or {}
+_G.furphyBuffCache = C
 C.playerInfo  = C.playerInfo  or {}
 C.displayable = C.displayable or {}
 
 local function DB()
-  return (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+  return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
 end
 
 -- Constants for weapon types

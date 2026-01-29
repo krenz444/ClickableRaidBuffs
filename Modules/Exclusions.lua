@@ -5,13 +5,13 @@
 
 local addonName, ns = ...
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 local function _ExSet() local d = DB(); d.exclusions = d.exclusions or {}; return d.exclusions end
 
 -- Checks if an ID is excluded.
 function ns.IsExcluded(id)
   if not id then return false end
-  local d = (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {}
+  local d = (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {}
   local ex = d.exclusions
   local rb = d.raidBuffExclusions
   if ex and ex[id] then return true end
@@ -26,7 +26,7 @@ end
 
 -- Checks if a displayable entry is excluded.
 function ns.IsDisplayableExcluded(cat, entry)
-  local d = (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+  local d = (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
   d.exclusions = d.exclusions or {}
   d.raidBuffExclusions = d.raidBuffExclusions or {}
 
@@ -124,7 +124,7 @@ function ns.Exclusions_RefreshNow()
     _pruneRenderCollections()
     if ns.RenderAll then ns.RenderAll()
     elseif ns.PushRender then ns.PushRender()
-    elseif _G.ClickableRaidBuffs_PushRender then _G.ClickableRaidBuffs_PushRender()
+    elseif _G.FurphyBuffButtons_PushRender then _G.FurphyBuffButtons_PushRender()
     end
   end)
 end

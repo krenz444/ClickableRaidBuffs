@@ -5,32 +5,32 @@
 
 local addonName, ns = ...
 
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.displayable = furphyBuffCache.displayable or {}
 
 local CAT = "ROGUE_POISONS"
 local TALENT_DOUBLE_PER_CAT = 381801
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {} end
 local function InCombat() return InCombatLockdown() end
 local function IsDeadOrGhost() return UnitIsDeadOrGhost("player") end
 
 -- Ensures the display category for rogue poisons exists.
 local function ensureCat()
-  clickableRaidBuffCache.displayable[CAT] = clickableRaidBuffCache.displayable[CAT] or {}
-  return clickableRaidBuffCache.displayable[CAT]
+  furphyBuffCache.displayable[CAT] = furphyBuffCache.displayable[CAT] or {}
+  return furphyBuffCache.displayable[CAT]
 end
 
 -- Clears the display category.
 local function clearCat()
-  if clickableRaidBuffCache.displayable[CAT] then wipe(clickableRaidBuffCache.displayable[CAT]) end
+  if furphyBuffCache.displayable[CAT] then wipe(furphyBuffCache.displayable[CAT]) end
 end
 
 -- Checks if the player is a Rogue.
 -- Returns cached value during combat.
 local function isRogue()
-  if InCombat() then return clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.playerClassId == 4 end
-  local cid = (clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.playerClassId)
+  if InCombat() then return furphyBuffCache.playerInfo and furphyBuffCache.playerInfo.playerClassId == 4 end
+  local cid = (furphyBuffCache.playerInfo and furphyBuffCache.playerInfo.playerClassId)
               or (type(getPlayerClass)=="function" and getPlayerClass()) or 0
   return cid == 4
 end
@@ -43,7 +43,7 @@ end
 
 -- Calculates the threshold for showing the poison icon based on spell duration settings.
 local function spellThresholdSecs()
-  local db = (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+  local db = (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
   local baseMin = db.spellThreshold or 15
   if ns.MPlus_GetEffectiveThresholdSecs then
     return ns.MPlus_GetEffectiveThresholdSecs("spell", baseMin)
@@ -110,7 +110,7 @@ local function Build()
     return
   end
 
-  local tbl = ClickableRaidData and ClickableRaidData[CAT]
+  local tbl = FurphyBuffData and FurphyBuffData[CAT]
   if not tbl then
     clearCat()
     return

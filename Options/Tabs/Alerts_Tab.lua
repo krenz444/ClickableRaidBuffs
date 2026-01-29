@@ -47,7 +47,7 @@ local K = {
   MASK_BOTTOM_PAD = -6,
 }
 
-local function DB()  return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB()  return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 -- Retrieves raid announcer settings.
 local function RAID()
   local d = DB()
@@ -75,7 +75,7 @@ local function PanelFontPath()
 end
 local function FS(fs, size, flags) if fs and fs.SetFont then fs:SetFont(PanelFontPath(), size or (O.SIZE_LABEL or 14), flags or "") end end
 
-local POP_KEY = "CRB_RA_TAB_RESET"
+local POP_KEY = "FBB_RA_TAB_RESET"
 if not StaticPopupDialogs[POP_KEY] then
   StaticPopupDialogs[POP_KEY] = {
     text = "%s",
@@ -429,7 +429,7 @@ end
 
 
 local function AnnouncerKeys()
-  local src = ClickableRaidData and ClickableRaidData["ANNOUNCER"]
+  local src = FurphyBuffData and FurphyBuffData["ANNOUNCER"]
   local keys, i = {}, 1
   if src then
     for k in pairs(src) do
@@ -444,12 +444,12 @@ local function AnnouncerKeys()
 end
 
 local function DefaultTextFor(key)
-  local src = ClickableRaidData and ClickableRaidData["ANNOUNCER"]
+  local src = FurphyBuffData and FurphyBuffData["ANNOUNCER"]
   return (src and src[key] and src[key].text) or key
 end
 
 local function LabelFor(key)
-  local src = ClickableRaidData and ClickableRaidData["ANNOUNCER"]
+  local src = FurphyBuffData and FurphyBuffData["ANNOUNCER"]
   return (src and src[key] and src[key].label) or key
 end
 

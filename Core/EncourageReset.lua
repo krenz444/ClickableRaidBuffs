@@ -6,22 +6,22 @@
 local addonName, ns = ...
 
 local function DB()
-  return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {}
+  return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {}
 end
 
 -- The version ID that triggers a reset prompt
 local PUSH_RESET_ID = "6.2.0"
-local POPUP_KEY = "CRB_RESET_REQUIRED"
+local POPUP_KEY = "FBB_RESET_REQUIRED"
 
 -- Define the popup dialog
 StaticPopupDialogs[POPUP_KEY] = {
-  text = "Upgrading to this version of Clickable Raid Buffs requires that the settings be reset to default. Some elements may work incorrectly if you do not reset settings. Reset them now?",
+  text = "Upgrading to this version of Furphy Buff Buttons requires that the settings be reset to default. Some elements may work incorrectly if you do not reset settings. Reset them now?",
   button1 = YES,
   button2 = NO,
   OnAccept = function()
     -- Clear saved variables
-    _G.ClickableRaidBuffsDB = nil
-    _G.ClickableRaidBuffsCharDB = nil
+    _G.FurphyBuffButtonsDB = nil
+    _G.FurphyBuffButtonsCharDB = nil
     -- Reset frame position
     local f = ns and ns.RenderParent
     if f and f.ClearUserPlaced then

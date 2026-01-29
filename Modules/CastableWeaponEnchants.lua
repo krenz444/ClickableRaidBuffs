@@ -5,19 +5,19 @@
 
 local addonName, ns = ...
 
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.displayable = furphyBuffCache.displayable or {}
 
 local CAT = "CASTABLE_WEAPON_ENCHANTS"
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {} end
 local function InCombat() return InCombatLockdown() end
 local function IsDeadOrGhost() return UnitIsDeadOrGhost("player") end
 
 -- Checks if debug mode is enabled for this module.
 local function DebugOn()
   local d = DB()
-  return (ns and ns.DEBUG_CWE) or (clickableRaidBuffCache and clickableRaidBuffCache.debugCWE) or (d and (d.debugCWE or d.debugAll or d.debug))
+  return (ns and ns.DEBUG_CWE) or (furphyBuffCache and furphyBuffCache.debugCWE) or (d and (d.debugCWE or d.debugAll or d.debug))
 end
 
 -- Logs debug messages.
@@ -46,13 +46,13 @@ end
 
 -- Ensures the display category for castable weapon enchants exists.
 local function ensureCat()
-  clickableRaidBuffCache.displayable[CAT] = clickableRaidBuffCache.displayable[CAT] or {}
-  return clickableRaidBuffCache.displayable[CAT]
+  furphyBuffCache.displayable[CAT] = furphyBuffCache.displayable[CAT] or {}
+  return furphyBuffCache.displayable[CAT]
 end
 
 -- Clears the display category.
 local function clearCat()
-  if clickableRaidBuffCache.displayable[CAT] then wipe(clickableRaidBuffCache.displayable[CAT]) end
+  if furphyBuffCache.displayable[CAT] then wipe(furphyBuffCache.displayable[CAT]) end
   Log("Cleared category displayables")
 end
 
@@ -147,7 +147,7 @@ local function Build(fromRender)
     return
   end
 
-  local tbl = ClickableRaidData and ClickableRaidData[CAT]
+  local tbl = FurphyBuffData and FurphyBuffData[CAT]
   if not tbl then
     clearCat()
     if not fromRender and ns.RenderAll and not InCombat() then ns.RenderAll() end
@@ -228,7 +228,7 @@ local function EnsureOrderHook()
     local have = false
     for i = 1, #list do if list[i] == CAT then have = true; break end end
     if have then return list end
-    local disp = _G.clickableRaidBuffCache and _G.clickableRaidBuffCache.displayable
+    local disp = _G.furphyBuffCache and _G.furphyBuffCache.displayable
     if disp and disp[CAT] and next(disp[CAT]) then
       local out = {}
       for i = 1, #list do out[i] = list[i] end

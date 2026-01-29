@@ -23,7 +23,7 @@ local THEME = {
   wellBR      = BORDER_COL,
   rowBG       = TILE_BG,
   rowBR       = BORDER_COL,
-  tickTint    = {0.35,0.80,1.00,1},
+  tickTint      = {0.35,0.80,1.00,1},
   checkboxBox = function() return (O and O.TEXT_CHECKBOX_W) or 20 end,
   tabH        = 24,
   tabGap      = 6,
@@ -36,7 +36,7 @@ local function PaintBackdrop(frame, bg, br)
   frame:SetBackdropBorderColor(unpack(br))
 end
 
-local function DB() return (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {} end
 local defaults = (O and O.DEFAULTS) or {}
 
 -- Creates a new checkbox with label and callback.
@@ -92,9 +92,9 @@ local function PingMythicPlus()
   if _G.updateWeaponEnchants then _G.updateWeaponEnchants() end
   local suppress = (ns and ns.MPlus_DisableConsumablesActive and ns.MPlus_DisableConsumablesActive()) or false
   if suppress then
-    _G.clickableRaidBuffCache = _G.clickableRaidBuffCache or {}
-    _G.clickableRaidBuffCache.displayable = _G.clickableRaidBuffCache.displayable or {}
-    local d = _G.clickableRaidBuffCache.displayable
+    _G.furphyBuffCache = _G.furphyBuffCache or {}
+    _G.furphyBuffCache.displayable = _G.furphyBuffCache.displayable or {}
+    local d = _G.furphyBuffCache.displayable
     d.FOOD, d.FLASK, d.MAIN_HAND, d.OFF_HAND = {}, {}, {}, {}
     if ns and ns.RenderAll then ns.RenderAll() end
     return
@@ -269,7 +269,7 @@ local function BuildMountsPanel(parent)
     d.mounts.selectedMount = id
     ns.SelectedMount = id
     for _, cb in ipairs(cbs) do
-      cb:SetChecked(cb._crb_id == id)
+      cb:SetChecked(cb._fbb_id == id)
     end
     if ns.Durability_SetSelectedMount then ns.Durability_SetSelectedMount(id) end
   end
@@ -291,7 +291,7 @@ local function BuildMountsPanel(parent)
           end
         end
       end)
-      cb._crb_id = id
+      cb._fbb_id = id
 
       if not prevCB then
         cb:SetPoint("TOPLEFT", holder, "TOPLEFT", 0, -4)

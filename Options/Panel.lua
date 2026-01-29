@@ -73,13 +73,13 @@ end
 
 -- Create the main panel frame
 local panel = CreateFrame("Frame", addonName.."OptionsPanel", UIParent)
-panel.name = "Clickable Raid Buffs"
+panel.name = "Furphy Buff Buttons"
 
 -- Register with WoW Settings API
 local category, categoryID
 ns.OpenOptions = function()
   if InCombatLockdown and InCombatLockdown() then
-    UIErrorsFrame:AddMessage("Cannot open Clickable Raid Buffs options in combat.", 1, 0.2, 0.2, 1)
+    UIErrorsFrame:AddMessage("Cannot open Furphy Buff Buttons options in combat.", 1, 0.2, 0.2, 1)
     return
   end
   if Settings and Settings.OpenToCategory then

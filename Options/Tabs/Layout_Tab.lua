@@ -19,7 +19,7 @@ local SCROLLBAR_X_OFFSET   = 0
 local SCROLLBAR_WIDTH      = 14
 local SCROLLBAR_INSET_PAD  = 5
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 
 -- Syncs center text color keys if they differ.
 local function SyncCenterColorKeys()
@@ -78,7 +78,7 @@ local function ApplyAllFontsPreservingCenterColor()
   ApplyAllFonts()
 end
 
-local POPUP_KEY = "CRB_CONFIRM_RESET_APPEAR"
+local POPUP_KEY = "FBB_CONFIRM_RESET_APPEAR"
 if not StaticPopupDialogs[POPUP_KEY] then
   StaticPopupDialogs[POPUP_KEY] = {
     text = "%s",
@@ -207,8 +207,8 @@ local function BuildOrderSection(content, Row)
   title:SetPoint("TOPLEFT", K.BOX_PAD_L, -K.TITLE_TOP_OFFSET)
   title:SetText("Icon Order")
 
-  if not StaticPopupDialogs["CRB_ORDER_RESET"] then
-    StaticPopupDialogs["CRB_ORDER_RESET"] = {
+  if not StaticPopupDialogs["FBB_ORDER_RESET"] then
+    StaticPopupDialogs["FBB_ORDER_RESET"] = {
       text = "Reset icon order to defaults?",
       button1 = YES, button2 = NO, timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3,
       OnAccept = function(self, data) if data and data.doReset then data.doReset() end end,
@@ -489,7 +489,7 @@ local function BuildOrderSection(content, Row)
     buildTiles()
   end
   local reset = OE.AttachResetTo(box, "BOTTOMRIGHT", box, "BOTTOMRIGHT", -10, 10, function()
-    StaticPopup_Show("CRB_ORDER_RESET", nil, nil, { doReset = doReset })
+    StaticPopup_Show("FBB_ORDER_RESET", nil, nil, { doReset = doReset })
   end); reset:Show()
 
   box._buildTiles = function() buildTiles() end

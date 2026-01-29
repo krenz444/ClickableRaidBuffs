@@ -2,9 +2,9 @@
 -- \Data\Alerts_Table.lua
 -- ====================================
 
-ClickableRaidData = ClickableRaidData or {}
+FurphyBuffData = FurphyBuffData or {}
 
-ClickableRaidData["ANNOUNCER"] = {
+FurphyBuffData["ANNOUNCER"] = {
   FEAST = {
     spellID = { 457285, 455960, 457487, 457283, 462212, 457302, 462211, 462213 },
     text   = "Feast Down",

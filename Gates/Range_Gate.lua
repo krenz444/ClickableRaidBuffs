@@ -8,7 +8,7 @@
 local addonName, ns = ...
 ns = ns or {}
 
-local function DB() return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {} end
+local function DB() return (ns.GetDB and ns.GetDB()) or FurphyBuffButtonsDB or {} end
 
 local function GetSpellRange(spellID)
   local info = C_Spell and C_Spell.GetSpellInfo and C_Spell.GetSpellInfo(spellID)

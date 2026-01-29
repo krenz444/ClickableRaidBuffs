@@ -11,8 +11,8 @@ NS = ns
 ns.RenderFrames = ns.RenderFrames or {}
 ns.RenderIndexByKey = ns.RenderIndexByKey or {}
 
-_G.clickableRaidBuffCache = _G.clickableRaidBuffCache or {}
-local C = _G.clickableRaidBuffCache
+_G.furphyBuffCache = _G.furphyBuffCache or {}
+local C = _G.furphyBuffCache
 
 -- Configuration for rank overlays (e.g., quality tiers).
 C.rankOverlayKnobs = C.rankOverlayKnobs or {
@@ -62,11 +62,11 @@ end
 -- Enables or disables the glow effect on a button.
 local function ensureGlow(btn, shouldEnable, color, size)
   if not shouldEnable then
-    if btn._crb_glow_enabled then
+    if btn._fbb_glow_enabled then
       Glow.PixelGlow_Stop(btn)
-      btn._crb_glow_enabled = false
-      btn._crb_glow_rgba = nil
-      btn._crb_glow_size = nil
+      btn._fbb_glow_enabled = false
+      btn._fbb_glow_rgba = nil
+      btn._fbb_glow_size = nil
     end
     return
   end
@@ -76,31 +76,31 @@ local function ensureGlow(btn, shouldEnable, color, size)
   local length = (10 / 50) * size
   local th     = ( 1.6 / 50) * size
 
-  if btn._crb_glow_enabled then
-    if not sameRGBA(btn._crb_glow_rgba, rgba) or btn._crb_glow_size ~= size then
+  if btn._fbb_glow_enabled then
+    if not sameRGBA(btn._fbb_glow_rgba, rgba) or btn._fbb_glow_size ~= size then
       Glow.PixelGlow_Stop(btn)
-      btn._crb_glow_enabled = false
+      btn._fbb_glow_enabled = false
     end
   end
-  if not btn._crb_glow_enabled then
+  if not btn._fbb_glow_enabled then
     Glow.PixelGlow_Start(btn, rgba, N, frequency, length, th, 0, 0, true)
-    btn._crb_glow_enabled = true
-    btn._crb_glow_rgba = rgba
-    btn._crb_glow_size = size
+    btn._fbb_glow_enabled = true
+    btn._fbb_glow_rgba = rgba
+    btn._fbb_glow_size = size
   end
 end
 
 -- Sets the icon texture if it has changed.
 local function setIconTextureIfChanged(btn, tex)
-  if btn.icon._crb_tex ~= tex then
+  if btn.icon._fbb_tex ~= tex then
     btn.icon:SetTexture(tex or 134400)
-    btn.icon._crb_tex = tex
+    btn.icon._fbb_tex = tex
   end
 end
 
 -- Sets the button action (macro, item, spell) if it has changed.
 local function setButtonActionIfChanged(btn, actionType, value1)
-  if btn._crb_action_type ~= actionType or btn._crb_action_v1 ~= value1 then
+  if btn._fbb_action_type ~= actionType or btn._fbb_action_v1 ~= value1 then
     if actionType == "macro" then
       btn:SetAttribute("type", "macro")
       btn:SetAttribute("macrotext", value1)
@@ -113,8 +113,8 @@ local function setButtonActionIfChanged(btn, actionType, value1)
     else
       btn:SetAttribute("type", nil)
     end
-    btn._crb_action_type = actionType
-    btn._crb_action_v1   = value1
+    btn._fbb_action_type = actionType
+    btn._fbb_action_v1   = value1
   end
 end
 
@@ -140,9 +140,9 @@ local function GetRaidBuffOrderIndex(spellID)
     if ns.GetRaidBuffOrderMap then
       _raidBuffOrderMap = ns.GetRaidBuffOrderMap() or _raidBuffOrderMap
     end
-    if not next(_raidBuffOrderMap) and _G.clickableRaidBuffCache and _G.ClickableRaidData then
-      local classID = _G.clickableRaidBuffCache.playerInfo and _G.clickableRaidBuffCache.playerInfo.playerClassId
-      local tbl = classID and _G.ClickableRaidData[classID]
+    if not next(_raidBuffOrderMap) and _G.furphyBuffCache and _G.FurphyBuffData then
+      local classID = _G.furphyBuffCache.playerInfo and _G.furphyBuffCache.playerInfo.playerClassId
+      local tbl = classID and _G.FurphyBuffData[classID]
       if tbl then
         local keys = {}
         for k in pairs(tbl) do if type(k)=="number" then keys[#keys+1]=k end end
@@ -203,14 +203,14 @@ function ns.HideAllRenderedIcons()
   ns.Overlay:Hide()
   for _, b in ipairs(ns.RenderFrames) do
     if b:IsShown() then
-      if b._crb_glow_enabled then
+      if b._fbb_glow_enabled then
         Glow.PixelGlow_Stop(b)
-        b._crb_glow_enabled = false
-        b._crb_glow_rgba = nil
+        b._fbb_glow_enabled = false
+        b._fbb_glow_rgba = nil
       end
       if ns.ClearCooldownVisual then ns.ClearCooldownVisual(b) end
-      b._crb_key = nil
-      b._crb_entry = nil
+      b._fbb_key = nil
+      b._fbb_entry = nil
       if b.timerText       then b.timerText:SetText(""); b.timerText:Hide() end
       if b.rankOverlay     then b.rankOverlay:Hide() end
       if b.fleetingOverlay then b.fleetingOverlay:Hide() end
@@ -269,7 +269,7 @@ function ns.RenderAll()
   if InCombatLockdown() then return end
 
   local db = ns.GetDB() or {}
-  local displayable = _G.clickableRaidBuffCache and _G.clickableRaidBuffCache.displayable or {}
+  local displayable = _G.furphyBuffCache and _G.furphyBuffCache.displayable or {}
 
   local eatingActive = false
   do
@@ -313,8 +313,8 @@ function ns.RenderAll()
       table.insert(items, {
         category = "DUMMY",
         name = "Dummy"..i,
-        texture = "Interface\\AddOns\\ClickableRaidBuffs\\Media\\furphyLogoIcon",
-        _crb_dummy = true,
+        texture = "Interface\\AddOns\\FurphyBuffButtons\\Media\\furphyLogoIcon",
+        _fbb_dummy = true,
       })
     end
   end
@@ -324,12 +324,12 @@ function ns.RenderAll()
     ns.Overlay:Hide()
     for _, b in ipairs(ns.RenderFrames) do
       if b:IsShown() then
-        if b._crb_glow_enabled and Glow then Glow.PixelGlow_Stop(b) end
+        if b._fbb_glow_enabled and Glow then Glow.PixelGlow_Stop(b) end
         if ns.ClearCooldownVisual then ns.ClearCooldownVisual(b) end
-        b._crb_glow_enabled = false
-        b._crb_glow_rgba = nil
-        b._crb_key = nil
-        b._crb_entry = nil
+        b._fbb_glow_enabled = false
+        b._fbb_glow_rgba = nil
+        b._fbb_key = nil
+        b._fbb_entry = nil
         if b.timerText then b.timerText:SetText(""); b.timerText:Hide() end
         if b.rankOverlay then b.rankOverlay:Hide() end
         if b.fleetingOverlay then b.fleetingOverlay:Hide() end
@@ -346,9 +346,9 @@ function ns.RenderAll()
       if ns.GetRaidBuffOrderMap then
         _raidBuffOrderMap = ns.GetRaidBuffOrderMap() or _raidBuffOrderMap
       end
-      if not next(_raidBuffOrderMap) and _G.clickableRaidBuffCache and _G.ClickableRaidData then
-        local classID = _G.clickableRaidBuffCache.playerInfo and _G.clickableRaidBuffCache.playerInfo.playerClassId
-        local tbl = classID and _G.ClickableRaidData[classID]
+      if not next(_raidBuffOrderMap) and _G.furphyBuffCache and _G.FurphyBuffData then
+        local classID = _G.furphyBuffCache.playerInfo and _G.furphyBuffCache.playerInfo.playerClassId
+        local tbl = classID and _G.FurphyBuffData[classID]
         if tbl then
           local keys = {}
           for k in pairs(tbl) do if type(k)=="number" then keys[#keys+1]=k end end
@@ -539,11 +539,11 @@ function ns.RenderAll()
 
   local function ensureGlow(btn, shouldEnable, color, size)
     if not shouldEnable then
-      if btn._crb_glow_enabled and Glow then
+      if btn._fbb_glow_enabled and Glow then
         Glow.PixelGlow_Stop(btn)
-        btn._crb_glow_enabled = false
-        btn._crb_glow_rgba = nil
-        btn._crb_glow_size = nil
+        btn._fbb_glow_enabled = false
+        btn._fbb_glow_rgba = nil
+        btn._fbb_glow_size = nil
       end
       return
     end
@@ -553,29 +553,29 @@ function ns.RenderAll()
     local frequency = 0.25
     local length = (10 / 50) * size
     local th     = ( 1.6 / 50) * size
-    if btn._crb_glow_enabled then
-      if not sameRGBA(btn._crb_glow_rgba, rgba) or btn._crb_glow_size ~= size then
+    if btn._fbb_glow_enabled then
+      if not sameRGBA(btn._fbb_glow_rgba, rgba) or btn._fbb_glow_size ~= size then
         Glow.PixelGlow_Stop(btn)
-        btn._crb_glow_enabled = false
+        btn._fbb_glow_enabled = false
       end
     end
-    if not btn._crb_glow_enabled then
+    if not btn._fbb_glow_enabled then
       Glow.PixelGlow_Start(btn, rgba, N, frequency, length, th, 0, 0, true)
-      btn._crb_glow_enabled = true
-      btn._crb_glow_rgba = rgba
-      btn._crb_glow_size = size
+      btn._fbb_glow_enabled = true
+      btn._fbb_glow_rgba = rgba
+      btn._fbb_glow_size = size
     end
   end
 
   local function setIconTextureIfChanged(btn, tex)
-    if btn.icon._crb_tex ~= tex then
+    if btn.icon._fbb_tex ~= tex then
       btn.icon:SetTexture(tex or 134400)
-      btn.icon._crb_tex = tex
+      btn.icon._fbb_tex = tex
     end
   end
 
   local function setButtonActionIfChanged(btn, actionType, value1)
-    if btn._crb_action_type ~= actionType or btn._crb_action_v1 ~= value1 then
+    if btn._fbb_action_type ~= actionType or btn._fbb_action_v1 ~= value1 then
       if actionType == "macro" then
         btn:SetAttribute("type", "macro")
         btn:SetAttribute("macrotext", value1)
@@ -588,8 +588,8 @@ function ns.RenderAll()
       else
         btn:SetAttribute("type", nil)
       end
-      btn._crb_action_type = actionType
-      btn._crb_action_v1   = value1
+      btn._fbb_action_type = actionType
+      btn._fbb_action_v1   = value1
     end
   end
 
@@ -678,9 +678,9 @@ function ns.RenderAll()
         btn.centerText:SetPoint("CENTER", btn, "CENTER", 0, 0)
         btn.centerText:SetFont(centerFontPath, centerSize, centerOutline)
         btn.centerText:SetTextColor(ctc.r, ctc.g, ctc.b, ctc.a or 1)
-        btn._crb_center_font_path  = centerFontPath
-        btn._crb_center_font_size  = centerSize
-        btn._crb_center_outline    = centerOutline
+        btn._fbb_center_font_path  = centerFontPath
+        btn._fbb_center_font_size  = centerSize
+        btn._fbb_center_outline    = centerOutline
 
         btn.cornerText = btn:CreateFontString(nil, "OVERLAY")
         btn.cornerText:SetPoint("BOTTOMRIGHT", btn, "BOTTOMRIGHT", -2, 2)
@@ -695,12 +695,12 @@ function ns.RenderAll()
         btn.timerText:Hide()
 
         btn:SetScript("OnEnter", function(self)
-          local d  = (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+          local d  = (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
           local tt = (d.tooltips and d.tooltips.enabled ~= false)
-          local entryX = self._crb_entry
+          local entryX = self._fbb_entry
 
           if entryX and entryX.hoverIcon and self.icon and self.icon.GetTexture then
-            self._crb_icon_restore = self.icon:GetTexture()
+            self._fbb_icon_restore = self.icon:GetTexture()
             self.icon:SetTexture(entryX.hoverIcon)
           end
 
@@ -736,9 +736,9 @@ function ns.RenderAll()
         btn:SetScript("OnLeave", function(self)
           GameTooltip:Hide()
 
-          if self.icon and self._crb_icon_restore then
-            self.icon:SetTexture(self._crb_icon_restore)
-            self._crb_icon_restore = nil
+          if self.icon and self._fbb_icon_restore then
+            self.icon:SetTexture(self._fbb_icon_restore)
+            self._fbb_icon_restore = nil
           end
 
           if not (IsShiftKeyDown() and (ns.Hover:IsMouseOver() or ns.Overlay:IsMouseOver())) then
@@ -751,32 +751,32 @@ function ns.RenderAll()
         ns.RenderFrames[index] = btn
       end
       ns.RenderIndexByKey[key] = btn
-      btn._crb_key = key
+      btn._fbb_key = key
     end
 
     local btn2 = ns.RenderIndexByKey[key]
     used[key] = true
-    btn2._crb_entry = entry
+    btn2._fbb_entry = entry
 
     btn2:SetSize(size, size)
     btn2:ClearAllPoints()
     local p = coords[idx]
     btn2:SetPoint("CENTER", ns.RenderParent, "CENTER", p.x, p.y)
 
-    if btn2._crb_center_font_size ~= centerSize or
-       btn2._crb_center_font_path ~= centerFontPath or
-       btn2._crb_center_outline   ~= centerOutline then
+    if btn2._fbb_center_font_size ~= centerSize or
+       btn2._fbb_center_font_path ~= centerFontPath or
+       btn2._fbb_center_outline   ~= centerOutline then
       btn2.centerText:SetFont(centerFontPath, centerSize, centerOutline)
-      btn2._crb_center_font_size = centerSize
-      btn2._crb_center_font_path = centerFontPath
-      btn2._crb_center_outline   = centerOutline
+      btn2._fbb_center_font_size = centerSize
+      btn2._fbb_center_font_path = centerFontPath
+      btn2._fbb_center_outline   = centerOutline
     end
     local ctcX = db.centerTextColor or {r=1,g=1,b=1,a=1}
-    if not btn2._crb_center_color or
-       btn2._crb_center_color.r ~= ctcX.r or btn2._crb_center_color.g ~= ctcX.g or
-       btn2._crb_center_color.b ~= ctcX.b or (btn2._crb_center_color.a or 1) ~= (ctcX.a or 1) then
+    if not btn2._fbb_center_color or
+       btn2._fbb_center_color.r ~= ctcX.r or btn2._fbb_center_color.g ~= ctcX.g or
+       btn2._fbb_center_color.b ~= ctcX.b or (btn2._fbb_center_color.a or 1) ~= (ctcX.a or 1) then
       btn2.centerText:SetTextColor(ctcX.r, ctcX.g, ctcX.b, ctcX.a or 1)
-      btn2._crb_center_color = {r=ctcX.r,g=ctcX.g,b=ctcX.b,a=ctcX.a}
+      btn2._fbb_center_color = {r=ctcX.r,g=ctcX.g,b=ctcX.b,a=ctcX.a}
     end
 
     local tex
@@ -792,9 +792,9 @@ function ns.RenderAll()
     else
       tex = 134400
     end
-    if btn2.icon._crb_tex ~= tex then
+    if btn2.icon._fbb_tex ~= tex then
       btn2.icon:SetTexture(tex or 134400)
-      btn2.icon._crb_tex = tex
+      btn2.icon._fbb_tex = tex
     end
 
     do
@@ -854,13 +854,13 @@ function ns.RenderAll()
 
     do
       local txtTop = entry.topLbl or ""
-      if btn2._crb_topText ~= txtTop then
+      if btn2._fbb_topText ~= txtTop then
         btn2.topText:SetText(txtTop)
-        btn2._crb_topText = txtTop
+        btn2._fbb_topText = txtTop
       end
     end
 
-    if not btn2._crb_center_from_cd then
+    if not btn2._fbb_center_from_cd then
       local centerVal = ""
       if entry and entry.centerText ~= nil then
         centerVal = tostring(entry.centerText or "")
@@ -873,9 +873,9 @@ function ns.RenderAll()
       else
         centerVal = ""
       end
-      if btn2._crb_centerText ~= centerVal then
+      if btn2._fbb_centerText ~= centerVal then
         btn2.centerText:SetText(centerVal)
-        btn2._crb_centerText = centerVal
+        btn2._fbb_centerText = centerVal
       end
     end
 
@@ -903,9 +903,9 @@ function ns.RenderAll()
         end
         txtBottom = val
       end
-      if btn2._crb_bottomText ~= txtBottom then
+      if btn2._fbb_bottomText ~= txtBottom then
         btn2.bottomText:SetText(txtBottom)
-        btn2._crb_bottomText = txtBottom
+        btn2._fbb_bottomText = txtBottom
       end
     end
 
@@ -913,9 +913,9 @@ function ns.RenderAll()
       local cornerVal = entry.qty and tostring(entry.qty) or ""
       if entry.category == "MAIN_HAND" then cornerVal = "MH"
       elseif entry.category == "OFF_HAND" then cornerVal = "OH" end
-      if btn2._crb_cornerText ~= cornerVal then
+      if btn2._fbb_cornerText ~= cornerVal then
         btn2.cornerText:SetText(cornerVal, "OUTLINE")
-        btn2._crb_cornerText = cornerVal
+        btn2._fbb_cornerText = cornerVal
       end
     end
 
@@ -946,14 +946,14 @@ function ns.RenderAll()
 
   for key, btn in pairs(ns.RenderIndexByKey) do
     if not used[key] and btn:IsShown() then
-      if btn._crb_glow_enabled and Glow then
+      if btn._fbb_glow_enabled and Glow then
         Glow.PixelGlow_Stop(btn)
-        btn._crb_glow_enabled = false
-        btn._crb_glow_rgba = nil
+        btn._fbb_glow_enabled = false
+        btn._fbb_glow_rgba = nil
       end
       if ns.ClearCooldownVisual then ns.ClearCooldownVisual(btn) end
-      btn._crb_key = nil
-      btn._crb_entry = nil
+      btn._fbb_key = nil
+      btn._fbb_entry = nil
       if btn.timerText then btn.timerText:SetText(""); btn.timerText:Hide() end
       if btn.rankOverlay then btn.rankOverlay:Hide() end
       if btn.fleetingOverlay then btn.fleetingOverlay:Hide() end

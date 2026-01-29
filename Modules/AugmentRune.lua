@@ -6,8 +6,8 @@
 local addonName, ns = ...
 ns = ns or {}
 
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.displayable = furphyBuffCache.displayable or {}
 
 local GetItemCount = GetItemCount
 local GetTime = GetTime
@@ -15,7 +15,7 @@ local AuraByIndex = C_UnitAuras and C_UnitAuras.GetAuraDataByIndex
 local AuraByInstance = C_UnitAuras and C_UnitAuras.GetAuraDataByAuraInstanceID
 
 local function DB()
-  return (ns.GetDB and ns.GetDB()) or _G.ClickableRaidBuffsDB or {}
+  return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
 end
 
 -- Calculates the threshold for showing the rune icon based on item duration settings.
@@ -30,7 +30,7 @@ end
 
 -- Retrieves Augment Rune data from the global data table.
 local function RuneData()
-  return (ClickableRaidData and ClickableRaidData["AUGMENT_RUNE"]) or {}
+  return (FurphyBuffData and FurphyBuffData["AUGMENT_RUNE"]) or {}
 end
 
 -- Checks if the rune passes gating requirements (instance, rested, group).
@@ -108,14 +108,14 @@ local function rebuildAugmentRune()
   if InCombatLockdown() then return end
 
   if mythicPlusDisableMode and mythicPlusDisableMode() then
-    clickableRaidBuffCache.displayable.AUGMENT_RUNE = {}
+    furphyBuffCache.displayable.AUGMENT_RUNE = {}
     if ns.RenderAll then ns.RenderAll() end
     return
   end
 
   ensureRuneBuffLookups()
 
-  local disp = clickableRaidBuffCache.displayable
+  local disp = furphyBuffCache.displayable
   disp.AUGMENT_RUNE = {}
 
   local runes   = RuneData()

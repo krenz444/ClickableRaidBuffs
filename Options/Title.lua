@@ -112,7 +112,7 @@ local function MakeCopyColumn(parent, labelText, urlText)
   col:SetHeight(CFG.Edit.height + 18)
 
   local lab = col:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-  lab._CRB_CopyLabel = true
+  lab._FBB_CopyLabel = true
   lab:SetPoint("TOPLEFT", 0, 0)
   lab:SetJustifyH("LEFT")
   lab:SetText(labelText or "")
@@ -187,17 +187,17 @@ O.RegisterSection(function(AddSection)
     local title = canvas:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
     do
       local anchor = anchorFrameByTag(CFG.Title.anchorTo, {box=box, canvas=canvas})
-      title._CRB_Title = true
+      title._FBB_Title = true
       title:SetPoint(CFG.Title.point, anchor, CFG.Title.relPoint, CFG.Title.x, CFG.Title.y)
       title:SetFont(O.GetFontPathByName(CFG.Title.fontName), CFG.Title.fontSize, "OUTLINE")
-      title:SetText("|cff00ccffClickable Raid Buffs|r")
+      title:SetText("|cff00ccffFurphy Buff Buttons|r")
       title:SetTextColor(0.92, 0.94, 1, 1)
     end
 
     local author = canvas:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
     do
       local anchor = anchorFrameByTag(CFG.Author.anchorTo, {box=box, canvas=canvas})
-      author._CRB_AuthorLabel = true
+      author._FBB_AuthorLabel = true
       author:SetText(O.AUTHOR_LABEL_TEXT or "By |cffff7d0FFurphy|r\ncontinuation of addon by Funki (funki.gg)")
       author:SetFont(O.GetFontPathByName(CFG.Author.fontName), CFG.Author.fontSize, "")
       author:SetPoint(CFG.Author.point, anchor, CFG.Author.relPoint, CFG.Author.x, CFG.Author.y)

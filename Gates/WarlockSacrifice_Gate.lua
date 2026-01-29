@@ -12,7 +12,7 @@ local SACRIFICE_BUFF  = 196099
 local WARLOCK_CLASSID = 9
 
 local function PlayerClassID()
-  local id = clickableRaidBuffCache and clickableRaidBuffCache.playerInfo and clickableRaidBuffCache.playerInfo.playerClassId
+  local id = furphyBuffCache and furphyBuffCache.playerInfo and furphyBuffCache.playerInfo.playerClassId
   if id then return id end
   local _, _, cid = UnitClass("player")
 

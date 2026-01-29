@@ -2,9 +2,9 @@
 -- \Data\RoguePoisons_Table.lua
 -- ====================================
 
-ClickableRaidData = ClickableRaidData or {}
+FurphyBuffData = FurphyBuffData or {}
 
-ClickableRaidData["ROGUE_POISONS"] = {
+FurphyBuffData["ROGUE_POISONS"] = {
   [2823]   = { name = "Deadly Poison",     spellID = 2823,   buffID = { 2823 },   cat = "LETHAL",    topLbl = "", btmLbl = "" },
   [315584] = { name = "Instant Poison",    spellID = 315584, buffID = { 315584 }, cat = "LETHAL",    topLbl = "", btmLbl = "" },
   [8679]   = { name = "Wound Poison",      spellID = 8679,   buffID = { 8679 },   cat = "LETHAL",    topLbl = "", btmLbl = "" },

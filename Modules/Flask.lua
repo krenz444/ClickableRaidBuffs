@@ -5,9 +5,9 @@
 
 local addonName, ns = ...
 
-clickableRaidBuffCache = clickableRaidBuffCache or {}
-clickableRaidBuffCache.playerInfo  = clickableRaidBuffCache.playerInfo  or {}
-clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
+furphyBuffCache = furphyBuffCache or {}
+furphyBuffCache.playerInfo  = furphyBuffCache.playerInfo  or {}
+furphyBuffCache.displayable = furphyBuffCache.displayable or {}
 
 local FALLBACK = { 432473, 432021, 431974, 431973, 431972, 431971 }
 local FLASK_IDS, FLEETING_BY_BUFFID
@@ -17,7 +17,7 @@ local function BuildSetsOnce()
   if FLASK_IDS then return end
   FLASK_IDS, FLEETING_BY_BUFFID = {}, {}
   local seen = {}
-  local tbl = _G.ClickableRaidData and _G.ClickableRaidData["FLASK"]
+  local tbl = _G.FurphyBuffData and _G.FurphyBuffData["FLASK"]
 
   if type(tbl) == "table" then
     for _, row in pairs(tbl) do
@@ -68,7 +68,7 @@ end
 -- Skipped during combat.
 local function UpdateFlaskState()
   if InCombatLockdown() then return end
-  local pi = clickableRaidBuffCache.playerInfo
+  local pi = furphyBuffCache.playerInfo
   local newExpire = GetFlaskExpire()
   if pi.flaskExpireTime ~= newExpire then
     pi.flaskExpireTime = newExpire
@@ -84,7 +84,7 @@ end
 -- Skipped during combat.
 local function ApplyFleetingGate()
   if InCombatLockdown() then return end
-  local disp = clickableRaidBuffCache.displayable
+  local disp = furphyBuffCache.displayable
   local cat = disp and disp.FLASK
   if type(cat) ~= "table" then return end
 

@@ -19,7 +19,7 @@ local EATING_NAMES = {}
 local WELLFED_NAMES = {}
 
 local function DB()
-  return (ns.GetDB and ns.GetDB()) or ClickableRaidBuffsDB or {}
+  return (ns.GetDB and ns.GetDB()) or _G.FurphyBuffButtonsDB or {}
 end
 
 -- Calculates the threshold for showing the eating icon based on item duration settings.
@@ -36,7 +36,7 @@ function BuildNameSets()
   wipe(EATING_NAMES)
   wipe(WELLFED_NAMES)
 
-  local srcE = ClickableRaidData and ClickableRaidData["EATING"]
+  local srcE = FurphyBuffData and FurphyBuffData["EATING"]
   if type(srcE) == "table" then
     for _, id in pairs(srcE) do
       local info = C_Spell and C_Spell.GetSpellInfo and C_Spell.GetSpellInfo(id)
@@ -47,7 +47,7 @@ function BuildNameSets()
     end
   end
 
-  local srcW = ClickableRaidData and ClickableRaidData["WELLFED"]
+  local srcW = FurphyBuffData and FurphyBuffData["WELLFED"]
   if type(srcW) == "table" then
     for _, id in pairs(srcW) do
       local info = C_Spell and C_Spell.GetSpellInfo and C_Spell.GetSpellInfo(id)
@@ -63,11 +63,11 @@ BuildNameSets()
 
 -- Ensures the display entry for eating exists.
 local function EnsureEatingEntry()
-  clickableRaidBuffCache = clickableRaidBuffCache or {}
-  clickableRaidBuffCache.displayable = clickableRaidBuffCache.displayable or {}
-  local cat = clickableRaidBuffCache.displayable["EATING"]
+  furphyBuffCache = furphyBuffCache or {}
+  furphyBuffCache.displayable = furphyBuffCache.displayable or {}
+  local cat = furphyBuffCache.displayable["EATING"]
   if not cat then
-    cat = {}; clickableRaidBuffCache.displayable["EATING"] = cat
+    cat = {}; furphyBuffCache.displayable["EATING"] = cat
   end
   local entry = cat["EATING"]
   if not entry then
@@ -79,8 +79,8 @@ end
 
 -- Clears the eating display entry.
 local function ClearEatingEntry()
-  if not clickableRaidBuffCache or not clickableRaidBuffCache.displayable then return end
-  local cat = clickableRaidBuffCache.displayable["EATING"]
+  if not furphyBuffCache or not furphyBuffCache.displayable then return end
+  local cat = furphyBuffCache.displayable["EATING"]
   if cat then cat["EATING"] = nil end
 end
 
