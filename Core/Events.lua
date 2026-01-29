@@ -47,6 +47,7 @@ f:RegisterEvent("PET_STABLE_UPDATE")
 f:RegisterEvent("UNIT_PET")
 f:RegisterEvent("PLAYER_MOUNT_DISPLAY_CHANGED")
 f:RegisterEvent("PLAYER_LOGIN")
+-- f:RegisterEvent("UNIT_SPELLCAST_SENT") -- Disabled for now, tied to alerts
 
 -- Helper to trigger an update
 local function poke()
@@ -555,14 +556,19 @@ f:SetScript("OnEvent", function(_, event, ...)
     return
   end
 
-  if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-    on_CLEU()
+  if event == "UNIT_SPELLCAST_SUCCEEDED" then
+    local unit, castGUID, spellID = ...
+        on_USCS(unit, castGUID, spellID)
     return
   end
 
-  if event == "UNIT_SPELLCAST_SUCCEEDED" then
-    local unit, castGUID, spellID = ...
-    on_USCS(unit, castGUID, spellID)
+  if event == "UNIT_SPELLCAST_SENT" then
+    -- UNIT_SPELLCAST_SENT only fires for player, spellID is never secret
+    -- Route directly to alerts module since it doesn't need buffering
+    -- local unit, target, castGUID, spellID = ...
+    -- if type(ns.Alerts_OnSpellCastSent) == "function" then
+    --   ns.Alerts_OnSpellCastSent(unit, spellID)
+    -- end
     return
   end
 end)

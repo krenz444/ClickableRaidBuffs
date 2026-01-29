@@ -52,4 +52,3 @@ This version includes significant updates to comply with Blizzard's latest addon
 
 *   **Furphy:** Current Maintainer
 *   **Funki:** Original Creator
-*   
